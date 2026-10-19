@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảo trì hệ thống | Vàng Son - Thư viện giai thoại âm nhạc xưa và nay</title>
+  <meta name="description" content="Vàng Son - Thư viện giai thoại âm nhạc xưa và nay hiện đang trong thời gian nâng cấp và bảo trì hệ thống. Hãy chờ chúng tôi vài ngày, chúng tôi sẽ trở lại.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a0c10;
+      --bg-surface: #121620;
+      --gold-primary: #d4af37;
+      --gold-light: #f7df94;
+      --gold-dim: #997d26;
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #94a3b8;
+      --card-border: rgba(212, 175, 55, 0.22);
+      --card-bg: rgba(18, 22, 32, 0.78);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background: radial-gradient(circle at 50% 15%, #1f2536 0%, #0d1017 55%, var(--bg-deep) 100%);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 2.5rem 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glow & decorative vinyl rings */
+    .ambient-glow {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, rgba(212, 175, 55, 0.02) 65%, transparent 75%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: breathe 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes breathe {
+      0% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.6; }
+      100% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+    }
+
+    .ambient-rings {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 680px;
+      height: 680px;
+      border-radius: 50%;
+      border: 1px dashed rgba(212, 175, 55, 0.12);
+      pointer-events: none;
+      z-index: 0;
+      animation: spinRings 90s linear infinite;
+    }
+
+    @keyframes spinRings {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    header {
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-title {
+      font-family: 'Berkshire Swash', cursive, serif;
+      font-size: 2.6rem;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff2cc 0%, var(--gold-light) 40%, var(--gold-primary) 85%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+      text-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+    }
+
+    .brand-tagline {
+      font-size: 0.95rem;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    main {
+      z-index: 1;
+      width: 100%;
+      max-width: 660px;
+      margin: 2.5rem auto;
+      text-align: center;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 3.25rem 2.5rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.42rem 1.15rem;
+      border-radius: 9999px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      color: var(--gold-light);
+      font-size: 0.825rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      box-shadow: 0 0 10px var(--gold-light);
+      animation: blink 2.2s infinite ease-in-out;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+
+    .vinyl-icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 1.75rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: radial-gradient(circle, #242b3b 0%, #151922 100%);
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 0 14px rgba(212, 175, 55, 0.25);
+      position: relative;
+    }
+
+    .vinyl-icon svg {
+      width: 36px;
+      height: 36px;
+      color: var(--gold-light);
+      animation: subtleFloat 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtleFloat {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.15rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.25rem;
+      color: #ffffff;
+    }
+
+    .message-intro {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .message-highlight {
+      display: inline-block;
+      margin-top: 0.4rem;
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.1);
+      padding: 0.65rem 1.4rem;
+      border-radius: 12px;
+      border: 1px dashed rgba(212, 175, 55, 0.35);
+    }
+
+    .sub-note {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.28), transparent);
+      margin: 2rem 0 1.75rem 0;
+    }
+
+    .info-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .info-footer a {
+      color: var(--gold-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease, text-decoration 0.2s ease;
+    }
+
+    .info-footer a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    footer {
+      z-index: 1;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      letter-spacing: 0.2px;
+    }
+
+    footer a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    footer a:hover {
+      color: var(--gold-light);
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 2.5rem 1.35rem;
+      }
+      .brand-title {
+        font-size: 2.1rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      .message-intro {
+        font-size: 0.98rem;
+      }
+      .message-highlight {
+        font-size: 1.05rem;
+        padding: 0.55rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-rings"></div>
+
+  <header>
+    <div class="brand-title">Vàng Son</div>
+    <div class="brand-tagline">Thư viện giai thoại âm nhạc xưa và nay</div>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        Hệ thống đang bảo trì & nâng cấp
+      </div>
+
+      <div class="vinyl-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a.75.75 0 00.632-.72V6.674M9 13.053v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66A.75.75 0 009 14.496V9.75M9 9l10.5-3" />
+        </svg>
+      </div>
+
+      <h1>Tạm ngừng phục vụ để nâng cấp</h1>
+
+      <p class="message-intro">
+        Kính gửi Quý độc giả và Quý Cô Bác, Anh Chị yêu âm nhạc,<br>
+        <strong>vangson.info</strong> đang trong quá trình bảo trì và nâng cấp toàn diện cơ sở dữ liệu.
+      </p>
+
+      <div class="message-highlight">
+        Hãy chờ chúng tôi vài ngày, chúng tôi sẽ trở lại!
+      </div>
+
+      <p class="sub-note">
+        Kho tàng hàng ngàn giai thoại âm nhạc xưa và nay sẽ sớm tái ngộ cùng Quý vị với trải nghiệm tra cứu hoàn thiện và phong phú hơn.
+      </p>
+
+      <div class="divider"></div>
+
+      <div class="info-footer">
+        <div>Nguồn tư liệu được sưu tầm và tổng hợp từ năm 2017.</div>
+        <div>Mọi thông tin liên hệ, xin gửi về email: <a href="mailto:admin@vangson.info">admin@vangson.info</a></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>&copy; 2017 - 2026 <strong>Vàng Son</strong>. All rights reserved.</div>
+    <div>Built with ❤️ by <a href="https://dilabs.io.vn/" target="_blank" rel="noopener noreferrer">DiLabs</a></div>
+  </footer>
+</body>
+</html>
