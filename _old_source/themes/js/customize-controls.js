@@ -1,1 +1,0 @@
-(function($){$(document).ready(function(){$('#customize-control-xmag_custom_css textarea').attr('disabled','disabled')})})(jQuery)
