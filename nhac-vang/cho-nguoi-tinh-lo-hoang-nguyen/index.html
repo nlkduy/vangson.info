@@ -149,7 +149,9 @@
 			<h1 class="post__title">Hoàng Nguyên: Ai lên xứ hoa đào, Cho người tình lỡ</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-12-20T18:18:21&#43;07:00">tháng 12 20, 2018</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-12-20T18:18:21&#43;07:00">20/12/2018</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
 	</span>
 </div>
 
@@ -187,7 +189,6 @@ cho tôi bớt mơ mộng chiều chiều nhìn mây trôi xa xa<br>
 người về từ hôm nao mà lòng còn thương vẫn thương<br>
 bao nhiêu năm tháng cũ mà hồn nào thôi vấn vương<br>
 giờ này nhìn sương khói mà thầm mơ màu hoa trên má ai ..</p>
-<iframe src="//www.youtube.com/embed/wCS6fFsmdac" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 </div>
 <p><strong>Cho Người Tình Lỡ</strong></p>
 <p>Khóc mà chi, yêu thương qua rồi<br>
@@ -210,7 +211,6 @@ những lời yêu ấy nay đã quá xa</p>
 khuất mù lối khiến nên tình đành lỡ<br>
 ta giờ đây như rừng thu<br>
 nắng liệm với chiếc lá vàng cuối mùa ..</p>
-<iframe src="//www.youtube.com/embed/fKGdCv0k0G8" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 
 		</div>
 	</article>
@@ -334,6 +334,18 @@ nắng liệm với chiếc lá vàng cuối mùa ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

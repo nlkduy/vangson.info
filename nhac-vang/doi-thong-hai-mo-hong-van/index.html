@@ -149,8 +149,10 @@
 			<h1 class="post__title">Đồi thông hai mộ - Hồng Vân</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-01-18T17:59:47&#43;07:00">tháng 1 18, 2018</time>
-	<time class="meta__text" datetime="2021-04-25T00:32:37&#43;07:00">(Cập nhật lần cuối: tháng 4 25, 2021)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>, <a class="meta__link" href="/category/phe-binh-va-nghien-cuu/" rel="category">Phê Bình và Nghiên Cứu</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-01-18T17:59:47&#43;07:00">18/01/2018</time>
+	<time class="meta__text" datetime="2021-04-25T00:32:37&#43;07:00">(Cập nhật lần cuối: 25/04/2021)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>, <a class="meta__link" href="/category/phe-binh-va-nghien-cuu/" rel="category">Phê Bình và Nghiên Cứu</a>
 	</span>
 </div>
 
@@ -201,7 +203,6 @@
 <span style="font-family: arial, helvetica, sans-serif;"> âm u chẳng nhang khói</span><br>
 <span style="font-family: arial, helvetica, sans-serif;"> trời xuôi chi trên cây còn lá úa</span><br>
 <span style="font-family: arial, helvetica, sans-serif;"> lá xanh kia rụng rồi ..</span></p>
-<iframe src="//www.youtube.com/embed/alVT_Y3hsp4" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <p><span style="font-family: arial, helvetica, sans-serif;"><strong>Đồi thông hai mộ 2</strong></span></p>
 <p><span style="font-family: arial, helvetica, sans-serif;">Chuyện kể tiếp rằng người con gái</span><br>
 <span style="font-family: arial, helvetica, sans-serif;"> năm tháng ôm sầu đau</span><br>
@@ -234,7 +235,6 @@
 <span style="font-family: arial, helvetica, sans-serif;"> một kiếp mong manh thương đời bất hạnh</span><br>
 <span style="font-family: arial, helvetica, sans-serif;"> đồi thông hai mộ</span><br>
 <span style="font-family: arial, helvetica, sans-serif;"> người qua đây xin ngỏ chút tình thương bùi ngùi ..</span></p>
-<iframe src="//www.youtube.com/embed/sU2GZRJxXFE" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 </div>
 
 		</div>
@@ -359,6 +359,18 @@
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

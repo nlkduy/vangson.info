@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Quản Trị Vàng Son - Admin CMS</title>
+	<link rel="icon" type="image/png" href="/favicon.png?v=2">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--primary: #e22d30;
+			--primary-hover: #c41e21;
+			--primary-soft: rgba(226, 45, 48, 0.1);
+			--bg: #f4f6f9;
+			--surface: #ffffff;
+			--sidebar-bg: #1e1f26;
+			--sidebar-text: #c9cdd4;
+			--text: #1f2329;
+			--text-muted: #646a73;
+			--border: #e5e6eb;
+			--success: #16a34a;
+			--warning: #d97706;
+			--danger: #dc2626;
+			--radius: 10px;
+			--shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		[hidden] {
+			display: none !important;
+		}
+
+		body {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			display: flex;
+			min-height: 100vh;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		/* Sidebar */
+		.sidebar {
+			width: 255px;
+			background: var(--sidebar-bg);
+			color: var(--sidebar-text);
+			display: flex;
+			flex-direction: column;
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 100;
+		}
+
+		.sidebar__brand {
+			padding: 22px 20px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			text-align: center;
+		}
+
+		.sidebar__logo {
+			font-family: 'Playfair Display', Georgia, serif;
+			font-size: 1.65rem;
+			font-weight: 800;
+			letter-spacing: 0.08em;
+			color: #fff;
+			text-decoration: none;
+			display: block;
+		}
+
+		.sidebar__sub {
+			font-size: 0.72rem;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: #9ca3af;
+			margin-top: 4px;
+		}
+
+		.sidebar__nav {
+			padding: 16px 12px;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.nav-btn {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+			padding: 11px 14px;
+			border: 0;
+			border-radius: 8px;
+			background: transparent;
+			color: var(--sidebar-text);
+			font-size: 0.92rem;
+			font-weight: 500;
+			cursor: pointer;
+			text-align: left;
+			transition: all 0.15s ease;
+		}
+
+		.nav-btn__left {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.nav-btn:hover {
+			background: rgba(255, 255, 255, 0.07);
+			color: #fff;
+		}
+
+		.nav-btn.active {
+			background: var(--primary);
+			color: #fff;
+			font-weight: 600;
+		}
+
+		.nav-badge {
+			font-size: 0.75rem;
+			padding: 2px 8px;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.14);
+			color: #fff;
+		}
+
+		.sidebar__footer {
+			padding: 16px;
+			border-top: 1px solid rgba(255, 255, 255, 0.08);
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.sidebar__link {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 9px 12px;
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.08);
+			color: #fff;
+			text-decoration: none;
+			font-size: 0.85rem;
+			font-weight: 500;
+			transition: background 0.15s;
+		}
+
+		.sidebar__link:hover {
+			background: rgba(255, 255, 255, 0.16);
+		}
+
+		/* Main Layout */
+		.main {
+			flex: 1;
+			margin-left: 255px;
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+
+		.topbar {
+			background: var(--surface);
+			border-bottom: 1px solid var(--border);
+			padding: 14px 28px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			position: sticky;
+			top: 0;
+			z-index: 50;
+		}
+
+		.topbar__title {
+			font-size: 1.2rem;
+			font-weight: 700;
+			color: var(--text);
+		}
+
+		.topbar__actions {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.server-status {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 0.8rem;
+			padding: 5px 12px;
+			border-radius: 999px;
+			font-weight: 500;
+			background: #ecfdf5;
+			color: #047857;
+			border: 1px solid #a7f3d0;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.server-status.offline {
+			background: #fef2f2;
+			color: #b91c1c;
+			border-color: #fecaca;
+		}
+
+		.status-dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: currentColor;
+			flex-shrink: 0;
+		}
+
+		.content {
+			padding: 24px 28px 48px;
+			max-width: 1440px;
+			width: 100%;
+			margin: 0 auto;
+		}
+
+		/* Stats Row */
+		.stats-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 16px;
+			margin-bottom: 22px;
+		}
+
+		.stat-card {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 16px 20px;
+			box-shadow: var(--shadow);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.stat-card__label {
+			font-size: 0.82rem;
+			color: var(--text-muted);
+			font-weight: 500;
+		}
+
+		.stat-card__value {
+			font-size: 1.65rem;
+			font-weight: 700;
+			color: var(--text);
+			margin-top: 4px;
+		}
+
+		.stat-card__icon {
+			width: 44px;
+			height: 44px;
+			border-radius: 10px;
+			background: var(--primary-soft);
+			color: var(--primary);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.3rem;
+		}
+
+		/* Buttons */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 9px 16px;
+			border-radius: 8px;
+			font-size: 0.88rem;
+			font-weight: 600;
+			border: 1px solid transparent;
+			cursor: pointer;
+			transition: all 0.15s ease;
+			text-decoration: none;
+			white-space: nowrap;
+		}
+
+		.btn--primary {
+			background: var(--primary);
+			color: #fff;
+		}
+
+		.btn--primary:hover {
+			background: var(--primary-hover);
+		}
+
+		.btn--outline {
+			background: var(--surface);
+			border-color: var(--border);
+			color: var(--text);
+		}
+
+		.btn--outline:hover {
+			border-color: #c0c4cc;
+			background: #f9fafb;
+		}
+
+		.btn--danger {
+			background: #fef2f2;
+			color: var(--danger);
+			border-color: #fecaca;
+		}
+
+		.btn--danger:hover {
+			background: var(--danger);
+			color: #fff;
+		}
+
+		.btn--sm {
+			padding: 5px 10px;
+			font-size: 0.8rem;
+			border-radius: 6px;
+		}
+
+		/* Toolbar / Filter Bar */
+		.panel {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			overflow: hidden;
+		}
+
+		.toolbar {
+			padding: 16px 20px;
+			border-bottom: 1px solid var(--border);
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+
+		.toolbar__filters {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 10px;
+			flex: 1;
+		}
+
+		.input,
+		.select,
+		.textarea {
+			padding: 9px 13px;
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			font-size: 0.9rem;
+			font-family: inherit;
+			color: var(--text);
+			background: #fff;
+			outline: none;
+			transition: border-color 0.15s;
+		}
+
+		.input:focus,
+		.select:focus,
+		.textarea:focus {
+			border-color: var(--primary);
+		}
+
+		.search-input {
+			min-width: 280px;
+			flex: 1;
+			max-width: 420px;
+		}
+
+		/* Table */
+		.table-wrap {
+			overflow-x: auto;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			text-align: left;
+		}
+
+		th {
+			background: #f8fafc;
+			color: var(--text-muted);
+			font-weight: 600;
+			font-size: 0.78rem;
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+			padding: 12px 16px;
+			border-bottom: 1px solid var(--border);
+		}
+
+		td {
+			padding: 13px 16px;
+			border-bottom: 1px solid var(--border);
+			vertical-align: middle;
+		}
+
+		tr:last-child td {
+			border-bottom: 0;
+		}
+
+		tr:hover td {
+			background: #fcfcfd;
+		}
+
+		.item-title {
+			font-weight: 600;
+			color: var(--text);
+			font-size: 0.95rem;
+			margin-bottom: 3px;
+			display: block;
+		}
+
+		.item-title:hover {
+			color: var(--primary);
+			cursor: pointer;
+		}
+
+		.item-sub {
+			font-size: 0.78rem;
+			color: var(--text-muted);
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.item-url {
+			color: #2563eb;
+			text-decoration: none;
+		}
+
+		.item-url:hover {
+			text-decoration: underline;
+		}
+
+		.badge {
+			display: inline-flex;
+			align-items: center;
+			padding: 3px 9px;
+			border-radius: 999px;
+			font-size: 0.76rem;
+			font-weight: 500;
+			margin: 2px 4px 2px 0;
+		}
+
+		.badge--cat {
+			background: var(--primary-soft);
+			color: var(--primary);
+		}
+
+		.badge--tag {
+			background: #f1f5f9;
+			color: #475569;
+		}
+
+		.badge--pub {
+			background: #dcfce7;
+			color: #15803d;
+		}
+
+		.badge--draft {
+			background: #fef3c7;
+			color: #b45309;
+		}
+
+		.row-actions {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		/* Pagination */
+		.pagination-bar {
+			padding: 14px 20px;
+			border-top: 1px solid var(--border);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 12px;
+			background: #fafbfc;
+		}
+
+		.pagination-info {
+			font-size: 0.85rem;
+			color: var(--text-muted);
+		}
+
+		.pagination-btns {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		/* Modal */
+		.modal-backdrop {
+			position: fixed;
+			inset: 0;
+			background: rgba(15, 23, 42, 0.55);
+			backdrop-filter: blur(2px);
+			z-index: 500;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		.modal-backdrop[hidden] {
+			display: none !important;
+		}
+
+		.modal {
+			background: var(--surface);
+			border-radius: 14px;
+			width: 100%;
+			max-width: 1040px;
+			max-height: 92vh;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+			overflow: hidden;
+		}
+
+		.modal--sm {
+			max-width: 540px;
+		}
+
+		.modal__header {
+			padding: 16px 24px;
+			border-bottom: 1px solid var(--border);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.modal__title {
+			font-size: 1.12rem;
+			font-weight: 700;
+		}
+
+		.modal__close {
+			background: transparent;
+			border: 0;
+			font-size: 1.5rem;
+			line-height: 1;
+			color: var(--text-muted);
+			cursor: pointer;
+		}
+
+		.modal__body {
+			padding: 22px 24px;
+			overflow-y: auto;
+			flex: 1;
+		}
+
+		.modal__footer {
+			padding: 14px 24px;
+			border-top: 1px solid var(--border);
+			background: #f8fafc;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		/* Form Layout */
+		.form-grid {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 20px;
+		}
+
+		.form-group {
+			margin-bottom: 15px;
+		}
+
+		.form-label {
+			display: block;
+			font-weight: 600;
+			font-size: 0.84rem;
+			margin-bottom: 6px;
+			color: var(--text);
+		}
+
+		.form-hint {
+			font-size: 0.76rem;
+			color: var(--text-muted);
+			margin-top: 4px;
+		}
+
+		.w-full {
+			width: 100%;
+		}
+
+		/* Category Selector Pills in Post Editor */
+		.cat-pills-box {
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			padding: 10px;
+			max-height: 210px;
+			overflow-y: auto;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			background: #fafbfc;
+		}
+
+		.cat-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			padding: 5px 10px;
+			border-radius: 999px;
+			border: 1px solid var(--border);
+			background: #fff;
+			font-size: 0.8rem;
+			cursor: pointer;
+			user-select: none;
+			transition: all 0.15s;
+		}
+
+		.cat-pill input {
+			accent-color: var(--primary);
+		}
+
+		.cat-pill.checked {
+			background: var(--primary-soft);
+			border-color: var(--primary);
+			color: var(--primary);
+			font-weight: 600;
+		}
+
+		/* Rich Editor */
+		.editor-box {
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			overflow: hidden;
+			background: #fff;
+		}
+
+		.editor-toolbar {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 6px;
+			padding: 8px 10px;
+			background: #f8fafc;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.editor-tools {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.tool-btn {
+			padding: 5px 9px;
+			border: 1px solid var(--border);
+			background: #fff;
+			border-radius: 5px;
+			font-size: 0.8rem;
+			font-weight: 600;
+			color: var(--text);
+			cursor: pointer;
+		}
+
+		.tool-btn:hover {
+			background: #f1f5f9;
+			border-color: #cbd5e1;
+		}
+
+		.tool-btn.active {
+			background: var(--primary);
+			color: #fff;
+			border-color: var(--primary);
+		}
+
+		.editor-visual {
+			min-height: 360px;
+			max-height: 520px;
+			overflow-y: auto;
+			padding: 16px;
+			outline: none;
+			font-size: 0.96rem;
+			line-height: 1.7;
+		}
+
+		.editor-visual p {
+			margin-bottom: 0.9em;
+		}
+
+		.editor-visual blockquote {
+			border-left: 4px solid var(--primary);
+			padding: 8px 16px;
+			background: #f8fafc;
+			margin: 1em 0;
+			font-style: italic;
+		}
+
+		.editor-visual img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 6px;
+		}
+
+		.editor-code {
+			width: 100%;
+			min-height: 360px;
+			padding: 14px;
+			border: 0;
+			outline: none;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+			font-size: 0.86rem;
+			line-height: 1.6;
+			resize: vertical;
+		}
+
+		/* Toast Notification */
+		.toast-container {
+			position: fixed;
+			bottom: 24px;
+			right: 24px;
+			z-index: 1000;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.toast {
+			background: #1e293b;
+			color: #fff;
+			padding: 12px 18px;
+			border-radius: 10px;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+			font-size: 0.88rem;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			animation: slideIn 0.2s ease;
+		}
+
+		.toast--success {
+			border-left: 4px solid #22c55e;
+		}
+
+		.toast--error {
+			border-left: 4px solid #ef4444;
+		}
+
+		@keyframes slideIn {
+			from {
+				transform: translateY(15px);
+				opacity: 0;
+			}
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+
+		.offline-banner {
+			background: #fffbeb;
+			border: 1px solid #fde68a;
+			color: #92400e;
+			padding: 14px 20px;
+			border-radius: var(--radius);
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+
+		.offline-banner code {
+			background: rgba(0, 0, 0, 0.07);
+			padding: 3px 8px;
+			border-radius: 5px;
+			font-weight: 600;
+		}
+
+		.success-banner {
+			background: #ecfdf5;
+			border: 1px solid #6ee7b7;
+			color: #065f46;
+			padding: 13px 20px;
+			border-radius: var(--radius);
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			font-weight: 600;
+			box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+			animation: slideIn 0.2s ease;
+		}
+
+		@media (max-width: 960px) {
+			.sidebar {
+				width: 210px;
+			}
+			.main {
+				margin-left: 210px;
+			}
+			.form-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 720px) {
+			body {
+				flex-direction: column;
+			}
+			.sidebar {
+				position: static;
+				width: 100%;
+			}
+			.main {
+				margin-left: 0;
+			}
+			.content {
+				padding: 16px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- Sidebar -->
+	<aside class="sidebar">
+		<div class="sidebar__brand">
+			<a href="/admin/" class="sidebar__logo">VÀNG SON</a>
+			<div class="sidebar__sub">Hệ Thống Quản Trị CMS</div>
+		</div>
+
+		<nav class="sidebar__nav">
+			<button type="button" class="nav-btn active" data-tab="posts">
+				<span class="nav-btn__left">📝 Quản lý Bài đăng</span>
+				<span class="nav-badge" id="nav-count-posts">0</span>
+			</button>
+			<a href="/admin/editor.html" class="nav-btn" style="text-decoration: none;">
+				<span class="nav-btn__left">➕ Thêm bài đăng mới</span>
+			</a>
+			<button type="button" class="nav-btn" data-tab="categories">
+				<span class="nav-btn__left">📂 Quản lý Thể loại</span>
+				<span class="nav-badge" id="nav-count-categories">0</span>
+			</button>
+			<button type="button" class="nav-btn" data-tab="pages">
+				<span class="nav-btn__left">📄 Quản lý Trang tĩnh</span>
+				<span class="nav-badge" id="nav-count-pages">0</span>
+			</button>
+		</nav>
+
+		<div class="sidebar__footer">
+			<a href="/" target="_blank" class="sidebar__link">🌐 Xem Trang Chủ Vàng Son ↗</a>
+		</div>
+	</aside>
+
+	<!-- Main Content -->
+	<div class="main">
+		<header class="topbar">
+			<h1 class="topbar__title" id="topbar-title">Quản lý Bài đăng</h1>
+			<div class="topbar__actions">
+				<div class="server-status" id="server-status">
+					<span class="status-dot"></span>
+					<span id="server-status-text">Đang kết nối API...</span>
+				</div>
+				<button type="button" class="btn btn--outline" id="btn-rebuild" title="Đồng bộ chỉ mục tìm kiếm và build lại Hugo">
+					🔄 Đồng bộ &amp; Build Web
+				</button>
+				<button type="button" class="btn btn--primary" id="btn-primary-create">
+					+ Thêm bài đăng mới
+				</button>
+			</div>
+		</header>
+
+		<main class="content">
+			<!-- Offline Notice if admin_server.py is not running -->
+			<div class="offline-banner" id="offline-banner" hidden>
+				<div>
+					<strong>⚠️ Chưa kết nối được Admin API Server (cổng 1314).</strong>
+					Để lưu thay đổi (Thêm / Sửa / Xóa) trực tiếp vào mã nguồn Hugo, hãy chạy lệnh sau trong thư mục dự án:
+					<code>python3 admin_server.py</code>
+				</div>
+				<button type="button" class="btn btn--sm btn--outline" onclick="window.vsAdmin.init()">Thử kết nối lại</button>
+			</div>
+
+			<!-- Sync / Rebuild Success Banner -->
+			<div class="success-banner" id="sync-success-banner" hidden>
+				<span id="sync-success-text">✅ Đã đồng bộ dữ liệu và build lại Website thành công!</span>
+				<button type="button" class="btn btn--sm btn--outline" onclick="document.getElementById('sync-success-banner').hidden = true;">Đóng</button>
+			</div>
+
+			<!-- Quick Stats -->
+			<div class="stats-grid">
+				<div class="stat-card">
+					<div>
+						<div class="stat-card__label">Tổng số bài đăng</div>
+						<div class="stat-card__value" id="stat-total-posts">0</div>
+					</div>
+					<div class="stat-card__icon">📝</div>
+				</div>
+				<div class="stat-card">
+					<div>
+						<div class="stat-card__label">Đã xuất bản</div>
+						<div class="stat-card__value" id="stat-pub-posts">0</div>
+					</div>
+					<div class="stat-card__icon">✅</div>
+				</div>
+				<div class="stat-card">
+					<div>
+						<div class="stat-card__label">Bản nháp</div>
+						<div class="stat-card__value" id="stat-draft-posts">0</div>
+					</div>
+					<div class="stat-card__icon">📋</div>
+				</div>
+				<div class="stat-card">
+					<div>
+						<div class="stat-card__label">Tổng số thể loại</div>
+						<div class="stat-card__value" id="stat-total-cats">0</div>
+					</div>
+					<div class="stat-card__icon">📂</div>
+				</div>
+			</div>
+
+			<!-- TAB 1 & 3: POSTS / PAGES VIEW -->
+			<section id="view-posts" class="panel">
+				<div class="toolbar">
+					<div class="toolbar__filters">
+						<input type="search" id="post-search" class="input search-input" placeholder="Tìm theo tên bài hát, nhạc sĩ, slug, thẻ tag...">
+						<select id="post-cat-filter" class="select">
+							<option value="">-- Tất cả thể loại --</option>
+						</select>
+						<select id="post-status-filter" class="select">
+							<option value="">Tất cả trạng thái</option>
+							<option value="published">Đã xuất bản</option>
+							<option value="draft">Bản nháp</option>
+						</select>
+						<select id="post-sort" class="select">
+							<option value="date-desc">Mới nhất trước</option>
+							<option value="date-asc">Cũ nhất trước</option>
+							<option value="title-asc">Tên A → Z</option>
+							<option value="title-desc">Tên Z → A</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 44%;">Tiêu đề &amp; Đường dẫn</th>
+								<th style="width: 22%;" id="th-col-cat">Thể loại</th>
+								<th style="width: 12%;">Ngày đăng</th>
+								<th style="width: 10%;">Trạng thái</th>
+								<th style="width: 12%; text-align: right;">Thao tác</th>
+							</tr>
+						</thead>
+						<tbody id="posts-tbody">
+							<tr><td colspan="5" style="text-align:center; padding: 32px;">Đang tải dữ liệu...</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="pagination-bar">
+					<div class="pagination-info" id="posts-page-info">Hiển thị 0 - 0</div>
+					<div class="pagination-btns" id="posts-page-btns"></div>
+				</div>
+			</section>
+
+			<!-- TAB 2: CATEGORIES VIEW -->
+			<section id="view-categories" class="panel" hidden>
+				<div class="toolbar">
+					<div class="toolbar__filters">
+						<input type="search" id="cat-search" class="input search-input" placeholder="Tìm kiếm tên thể loại, slug hoặc mô tả...">
+					</div>
+				</div>
+
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 26%;">Tên thể loại</th>
+								<th style="width: 22%;">Slug / Đường dẫn URL</th>
+								<th style="width: 28%;">Mô tả</th>
+								<th style="width: 10%;">Số bài đăng</th>
+								<th style="width: 14%; text-align: right;">Thao tác</th>
+							</tr>
+						</thead>
+						<tbody id="cats-tbody">
+							<tr><td colspan="5" style="text-align:center; padding: 32px;">Đang tải danh sách thể loại...</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</main>
+	</div>
+
+	<!-- MODAL: ADD / EDIT POST -->
+	<div class="modal-backdrop" id="modal-post" hidden>
+		<div class="modal">
+			<div class="modal__header">
+				<h2 class="modal__title" id="modal-post-title">Thêm bài đăng mới</h2>
+				<button type="button" class="modal__close" onclick="window.vsAdmin.closePostModal()">&times;</button>
+			</div>
+			<div class="modal__body">
+				<form id="form-post" onsubmit="return false;">
+					<input type="hidden" id="post-filename">
+					<div class="form-grid">
+						<!-- Left Column -->
+						<div>
+							<div class="form-group">
+								<label class="form-label" for="post-title">Tiêu đề bài đăng *</label>
+								<input type="text" id="post-title" class="input w-full" placeholder="Ví dụ: Làng tôi - Văn Cao" required>
+							</div>
+
+							<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+								<div class="form-group">
+									<label class="form-label" for="post-slug">Slug (không dấu)</label>
+									<div style="display:flex; gap:6px;">
+										<input type="text" id="post-slug" class="input w-full" placeholder="lang-toi-van-cao">
+										<button type="button" class="btn btn--sm btn--outline" onclick="window.vsAdmin.regenPostSlug()" title="Tạo lại slug từ tiêu đề">Tạo</button>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="form-label" for="post-url">Đường dẫn URL</label>
+									<input type="text" id="post-url" class="input w-full" placeholder="/nhac-tien-chien/lang-toi-van-cao">
+								</div>
+							</div>
+
+							<!-- Content Editor -->
+							<div class="form-group">
+								<label class="form-label">Nội dung bài viết</label>
+								<div class="editor-box">
+									<div class="editor-toolbar">
+										<div class="editor-tools" id="visual-toolbar">
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execCmd('bold')" title="In đậm"><b>B</b></button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execCmd('italic')" title="In nghiêng"><i>I</i></button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execCmd('underline')" title="Gạch chân"><u>U</u></button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execBlock('H2')">H2</button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execBlock('H3')">H3</button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execBlock('BLOCKQUOTE')" title="Trích dẫn / Lời bài hát">❝ Trích dẫn</button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.execCmd('insertUnorderedList')">• Danh sách</button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.insertLink()">🔗 Link</button>
+											<button type="button" class="tool-btn" onclick="document.getElementById('upload-inline-input').click()">🖼️ Chèn ảnh/nhạc</button>
+											<button type="button" class="tool-btn" onclick="window.vsAdmin.insertYoutube()">▶️ YouTube</button>
+											<input type="file" id="upload-inline-input" accept="image/*,audio/*" hidden onchange="window.vsAdmin.handleInlineUpload(this)">
+										</div>
+										<div>
+											<button type="button" class="tool-btn active" id="btn-mode-visual" onclick="window.vsAdmin.setEditorMode('visual')">Trực quan</button>
+											<button type="button" class="tool-btn" id="btn-mode-html" onclick="window.vsAdmin.setEditorMode('html')">Mã HTML</button>
+										</div>
+									</div>
+									<div id="editor-visual" class="editor-visual" contenteditable="true"></div>
+									<textarea id="editor-html" class="editor-code" hidden></textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label" for="post-desc">Mô tả ngắn / Trích dẫn (SEO Description)</label>
+								<textarea id="post-desc" class="textarea w-full" rows="2" placeholder="Để trống sẽ tự động trích xuất từ đoạn đầu bài viết..."></textarea>
+							</div>
+						</div>
+
+						<!-- Right Column -->
+						<div>
+							<div class="form-group">
+								<label class="form-label">Trạng thái &amp; Ngày đăng</label>
+								<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+									<select id="post-draft" class="select w-full">
+										<option value="false">✅ Đã xuất bản</option>
+										<option value="true">📋 Bản nháp</option>
+									</select>
+									<input type="date" id="post-date" class="input w-full">
+								</div>
+							</div>
+
+							<div class="form-group" id="group-post-cats">
+								<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+									<label class="form-label" style="margin:0;">Thể loại *</label>
+									<button type="button" class="btn btn--sm btn--outline" onclick="window.vsAdmin.quickAddCategory()">+ Thêm thể loại</button>
+								</div>
+								<div class="cat-pills-box" id="post-cats-box"></div>
+								<div class="form-hint">Chọn một hoặc nhiều thể loại cho bài viết.</div>
+							</div>
+
+							<div class="form-group" id="group-post-tags">
+								<label class="form-label" for="post-tags">Thẻ (Tags)</label>
+								<input type="text" id="post-tags" class="input w-full" placeholder="Văn Cao, Tiền Phong, Nhạc Tiền Chiến...">
+								<div class="form-hint">Phân cách nhiều thẻ bằng dấu phẩy (,).</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label" for="post-thumb">Ảnh đại diện (Thumbnail)</label>
+								<div style="display:flex; gap:6px;">
+									<input type="text" id="post-thumb" class="input w-full" placeholder="/wp-content/uploads/...">
+									<button type="button" class="btn btn--sm btn--outline" onclick="document.getElementById('upload-thumb-input').click()">Tải lên</button>
+									<input type="file" id="upload-thumb-input" accept="image/*" hidden onchange="window.vsAdmin.handleThumbUpload(this)">
+								</div>
+								<div id="thumb-preview-wrap" style="margin-top:8px;" hidden>
+									<img id="thumb-preview" src="" alt="Thumbnail preview" style="max-height:110px; border-radius:6px; border:1px solid var(--border);">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label" for="post-aliases">Đường dẫn chuyển hướng cũ (Aliases)</label>
+								<input type="text" id="post-aliases" class="input w-full" placeholder="/duong-dan-cu-1, /duong-dan-cu-2">
+								<div class="form-hint">Giữ nguyên SEO khi đổi URL (phân cách bằng dấu phẩy).</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal__footer">
+				<div>
+					<button type="button" class="btn btn--danger" id="btn-delete-in-modal" hidden onclick="window.vsAdmin.deleteCurrentPost()">🗑️ Xóa bài này</button>
+				</div>
+				<div style="display:flex; gap:10px;">
+					<button type="button" class="btn btn--outline" onclick="window.vsAdmin.closePostModal()">Hủy bỏ</button>
+					<button type="button" class="btn btn--primary" id="btn-save-post" onclick="window.vsAdmin.savePost()">💾 Lưu bài đăng</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- MODAL: ADD / EDIT CATEGORY -->
+	<div class="modal-backdrop" id="modal-cat" hidden>
+		<div class="modal modal--sm">
+			<div class="modal__header">
+				<h2 class="modal__title" id="modal-cat-title">Thêm thể loại mới</h2>
+				<button type="button" class="modal__close" onclick="window.vsAdmin.closeCatModal()">&times;</button>
+			</div>
+			<div class="modal__body">
+				<form id="form-cat" onsubmit="return false;">
+					<input type="hidden" id="cat-folder">
+					<input type="hidden" id="cat-old-title">
+					<div class="form-group">
+						<label class="form-label" for="cat-title">Tên thể loại *</label>
+						<input type="text" id="cat-title" class="input w-full" placeholder="Ví dụ: Nhạc Tiền Chiến" required>
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="cat-slug">Slug (không dấu)</label>
+						<input type="text" id="cat-slug" class="input w-full" placeholder="nhac-tien-chien">
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="cat-url">Đường dẫn URL</label>
+						<input type="text" id="cat-url" class="input w-full" placeholder="/category/nhac-tien-chien/">
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="cat-desc">Mô tả thể loại</label>
+						<textarea id="cat-desc" class="textarea w-full" rows="3" placeholder="Danh mục Nhạc Tiền Chiến trên Vàng Son"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal__footer">
+				<div></div>
+				<div style="display:flex; gap:10px;">
+					<button type="button" class="btn btn--outline" onclick="window.vsAdmin.closeCatModal()">Hủy bỏ</button>
+					<button type="button" class="btn btn--primary" id="btn-save-cat" onclick="window.vsAdmin.saveCat()">💾 Lưu thể loại</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Toast Container -->
+	<div class="toast-container" id="toast-container"></div>
+
+	<script>
+	window.vsAdmin = (function () {
+		// Automatically connect to local Admin API Server on port 1314
+		var API_BASE = (window.location.port === "1314") ? "" : "http://localhost:1314";
+
+		var state = {
+			activeTab: "posts", // 'posts' | 'categories' | 'pages'
+			posts: [],
+			pages: [],
+			categories: [],
+			page: 1,
+			perPage: 20,
+			editorMode: "visual",
+			editingFilename: null,
+			editingCatFolder: null,
+			apiOnline: false
+		};
+
+		function slugifyVN(str) {
+			if (!str) return "";
+			return str
+				.toString()
+				.trim()
+				.toLowerCase()
+				.replace(/đ/g, "d")
+				.normalize("NFD")
+				.replace(/[\u0300-\u036f]/g, "")
+				.replace(/[^a-z0-9\s-]/g, "")
+				.replace(/[\s-]+/g, "-")
+				.replace(/^-+|-+$/g, "");
+		}
+
+		function escapeHtml(s) {
+			return (s || "")
+				.toString()
+				.replace(/&/g, "&amp;")
+				.replace(/</g, "&lt;")
+				.replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;");
+		}
+
+		function toast(msg, type) {
+			var box = document.getElementById("toast-container");
+			var el = document.createElement("div");
+			el.className = "toast toast--" + (type || "success");
+			el.textContent = msg;
+			box.appendChild(el);
+			setTimeout(function () {
+				el.remove();
+			}, 3500);
+		}
+
+		async function apiFetch(path, options) {
+			var res = await fetch(API_BASE + path, Object.assign({
+				headers: { "Content-Type": "application/json" }
+			}, options || {}));
+			var data = await res.json();
+			if (!res.ok || !data.ok) {
+				throw new Error(data.error || "Lỗi kết nối máy chủ API");
+			}
+			return data;
+		}
+
+		var syncBannerTimer = null;
+		function showSyncSuccessBanner(msg) {
+			var banner = document.getElementById("sync-success-banner");
+			var textEl = document.getElementById("sync-success-text");
+			if (!banner || !textEl) return;
+			textEl.textContent = msg || "✅ Đã đồng bộ dữ liệu và build lại Website thành công!";
+			banner.hidden = false;
+			if (syncBannerTimer) clearTimeout(syncBannerTimer);
+			syncBannerTimer = setTimeout(function () {
+				banner.hidden = true;
+			}, 6000);
+		}
+
+		async function init() {
+			if (sessionStorage.getItem("vs_rebuilding") === "1") {
+				sessionStorage.removeItem("vs_rebuilding");
+				var defaultSuccessMsg = "✅ Đã đồng bộ dữ liệu và build lại Website thành công!";
+				showSyncSuccessBanner(defaultSuccessMsg);
+				toast(defaultSuccessMsg, "success");
+			}
+			var urlTab = new URLSearchParams(window.location.search).get("tab");
+			if (urlTab && ["posts", "categories", "pages"].indexOf(urlTab) !== -1) {
+				switchTab(urlTab);
+			}
+			try {
+				var st = await apiFetch("/api/status");
+				state.apiOnline = true;
+				document.getElementById("offline-banner").hidden = true;
+				var badge = document.getElementById("server-status");
+				badge.classList.remove("offline");
+				document.getElementById("server-status-text").textContent = "Đã kết nối API (Cổng 1314)";
+				updateStatsUI(st.stats);
+				await Promise.all([loadCategories(), loadPosts(), loadPages()]);
+			} catch (err) {
+				state.apiOnline = false;
+				document.getElementById("offline-banner").hidden = false;
+				var badge = document.getElementById("server-status");
+				badge.classList.add("offline");
+				document.getElementById("server-status-text").textContent = "Chưa bật API (1314)";
+				await loadFallbackFromIndexJson();
+			}
+		}
+
+		async function loadFallbackFromIndexJson() {
+			try {
+				var res = await fetch("/index.json");
+				var items = await res.json();
+				state.posts = items.filter(function (x) { return x.type === "post"; }).map(function (x) {
+					var slug = (x.url || "").split("/").filter(Boolean).pop() || "";
+					return {
+						filename: slug + ".md",
+						title: x.title,
+						slug: slug,
+						url: x.url,
+						isoDate: x.isoDate || "",
+						displayDate: x.date || "",
+						categories: (x.categories || []).map(function (c) { return c.title; }),
+						tags: [],
+						description: x.summary || "",
+						draft: false
+					};
+				});
+				state.pages = items.filter(function (x) { return x.type === "page"; }).map(function (x) {
+					var slug = (x.url || "").split("/").filter(Boolean).pop() || "";
+					return {
+						filename: slug + ".md",
+						title: x.title,
+						slug: slug,
+						url: x.url,
+						isoDate: x.isoDate || "",
+						displayDate: x.date || "",
+						categories: [],
+						tags: [],
+						description: x.summary || "",
+						draft: false
+					};
+				});
+				var catMap = {};
+				state.posts.forEach(function (p) {
+					p.categories.forEach(function (c) {
+						if (!catMap[c]) {
+							var s = slugifyVN(c);
+							catMap[c] = { folder: s, title: c, slug: s, url: "/category/" + s + "/", description: "", count: 0 };
+						}
+						catMap[c].count++;
+					});
+				});
+				state.categories = Object.values(catMap);
+				updateStatsUI({
+					totalPosts: state.posts.length,
+					publishedPosts: state.posts.length,
+					draftPosts: 0,
+					totalCategories: state.categories.length,
+					totalPages: state.pages.length
+				});
+				populateCategoryFilter();
+				renderPostsTable();
+				renderCategoriesTable();
+			} catch (e) {}
+		}
+
+		function updateStatsUI(stats) {
+			if (!stats) return;
+			document.getElementById("stat-total-posts").textContent = stats.totalPosts || 0;
+			document.getElementById("stat-pub-posts").textContent = stats.publishedPosts || 0;
+			document.getElementById("stat-draft-posts").textContent = stats.draftPosts || 0;
+			document.getElementById("stat-total-cats").textContent = stats.totalCategories || 0;
+			document.getElementById("nav-count-posts").textContent = stats.totalPosts || 0;
+			document.getElementById("nav-count-categories").textContent = stats.totalCategories || 0;
+			document.getElementById("nav-count-pages").textContent = stats.totalPages || 0;
+		}
+
+		async function loadPosts() {
+			var data = await apiFetch("/api/posts?scope=posts");
+			state.posts = data.items || [];
+			document.getElementById("nav-count-posts").textContent = state.posts.length;
+			document.getElementById("stat-total-posts").textContent = state.posts.length;
+			document.getElementById("stat-pub-posts").textContent = state.posts.filter(function (p) { return !p.draft; }).length;
+			document.getElementById("stat-draft-posts").textContent = state.posts.filter(function (p) { return p.draft; }).length;
+			if (state.activeTab === "posts") renderPostsTable();
+		}
+
+		async function loadPages() {
+			var data = await apiFetch("/api/posts?scope=pages");
+			state.pages = data.items || [];
+			document.getElementById("nav-count-pages").textContent = state.pages.length;
+			if (state.activeTab === "pages") renderPostsTable();
+		}
+
+		async function loadCategories() {
+			var data = await apiFetch("/api/categories");
+			state.categories = data.items || [];
+			document.getElementById("nav-count-categories").textContent = state.categories.length;
+			document.getElementById("stat-total-cats").textContent = state.categories.length;
+			populateCategoryFilter();
+			renderCategoriesTable();
+		}
+
+		function populateCategoryFilter() {
+			var sel = document.getElementById("post-cat-filter");
+			var current = sel.value;
+			var html = '<option value="">-- Tất cả thể loại (' + state.categories.length + ') --</option>';
+			state.categories.forEach(function (c) {
+				html += '<option value="' + escapeHtml(c.title) + '">' + escapeHtml(c.title) + ' (' + c.count + ')</option>';
+			});
+			sel.innerHTML = html;
+			sel.value = current;
+		}
+
+		function getFilteredPosts() {
+			var source = (state.activeTab === "pages") ? state.pages : state.posts;
+			var q = slugifyVN(document.getElementById("post-search").value).replace(/-/g, " ");
+			var rawQ = document.getElementById("post-search").value.trim().toLowerCase();
+			var cat = document.getElementById("post-cat-filter").value;
+			var status = document.getElementById("post-status-filter").value;
+			var sort = document.getElementById("post-sort").value;
+
+			var filtered = source.filter(function (item) {
+				if (state.activeTab === "posts" && cat && item.categories.indexOf(cat) === -1) {
+					return false;
+				}
+				if (status === "published" && item.draft) return false;
+				if (status === "draft" && !item.draft) return false;
+				if (rawQ) {
+					var hayRaw = (item.title + " " + item.slug + " " + (item.tags || []).join(" ") + " " + (item.description || "")).toLowerCase();
+					var hayNorm = slugifyVN(hayRaw).replace(/-/g, " ");
+					if (hayRaw.indexOf(rawQ) === -1 && hayNorm.indexOf(q) === -1) {
+						return false;
+					}
+				}
+				return true;
+			});
+
+			filtered.sort(function (a, b) {
+				if (sort === "date-asc") return (a.isoDate || "").localeCompare(b.isoDate || "");
+				if (sort === "title-asc") return a.title.localeCompare(b.title, "vi");
+				if (sort === "title-desc") return b.title.localeCompare(a.title, "vi");
+				return (b.isoDate || "").localeCompare(a.isoDate || "");
+			});
+
+			return filtered;
+		}
+
+		function renderPostsTable() {
+			var tbody = document.getElementById("posts-tbody");
+			var list = getFilteredPosts();
+			var total = list.length;
+			var maxPage = Math.max(1, Math.ceil(total / state.perPage));
+			if (state.page > maxPage) state.page = maxPage;
+
+			var start = (state.page - 1) * state.perPage;
+			var pageItems = list.slice(start, start + state.perPage);
+
+			document.getElementById("th-col-cat").textContent = (state.activeTab === "pages") ? "Mô tả ngắn" : "Thể loại";
+
+			if (!pageItems.length) {
+				tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 36px; color: var(--text-muted);">Không tìm thấy bài viết nào phù hợp.</td></tr>';
+			} else {
+				tbody.innerHTML = pageItems.map(function (item) {
+					var catsHtml = "";
+					if (state.activeTab === "pages") {
+						catsHtml = '<span style="color:var(--text-muted);font-size:0.82rem;">' + escapeHtml((item.description || "").slice(0, 90)) + '</span>';
+					} else {
+						catsHtml = (item.categories || []).map(function (c) {
+							return '<span class="badge badge--cat">' + escapeHtml(c) + '</span>';
+						}).join("");
+					}
+					var tagsHtml = (item.tags || []).slice(0, 4).map(function (t) {
+						return '<span class="badge badge--tag">#' + escapeHtml(t) + '</span>';
+					}).join("");
+					var statusHtml = item.draft
+						? '<span class="badge badge--draft">Bản nháp</span>'
+						: '<span class="badge badge--pub">Đã đăng</span>';
+
+					var scope = (state.activeTab === "pages") ? "pages" : "posts";
+					var editHref = "/admin/editor.html?file=" + encodeURIComponent(item.filename) + "&scope=" + scope;
+
+					return '<tr>' +
+						'<td>' +
+							'<a class="item-title" style="text-decoration:none;" href="' + editHref + '">' + escapeHtml(item.title) + '</a>' +
+							'<div class="item-sub">' +
+								'<a class="item-url" href="' + escapeHtml(item.url) + '" target="_blank">' + escapeHtml(item.url) + ' ↗</a>' +
+								tagsHtml +
+							'</div>' +
+						'</td>' +
+						'<td>' + catsHtml + '</td>' +
+						'<td>' + escapeHtml(item.displayDate || item.isoDate) + '</td>' +
+						'<td>' + statusHtml + '</td>' +
+						'<td style="text-align: right;">' +
+							'<div class="row-actions" style="justify-content: flex-end;">' +
+								'<a class="btn btn--sm btn--outline" href="' + editHref + '">✏️ Sửa</a>' +
+								'<button type="button" class="btn btn--sm btn--danger" onclick="window.vsAdmin.confirmDeletePost(\'' + escapeHtml(item.filename) + '\', \'' + escapeHtml(item.title.replace(/'/g, "\\'")) + '\')">🗑️ Xóa</button>' +
+							'</div>' +
+						'</td>' +
+					'</tr>';
+				}).join("");
+			}
+
+			// Pagination bar
+			var infoEl = document.getElementById("posts-page-info");
+			infoEl.textContent = total
+				? ("Hiển thị " + (start + 1) + " – " + Math.min(start + state.perPage, total) + " trên tổng số " + total + " mục")
+				: "0 kết quả";
+
+			var btnsEl = document.getElementById("posts-page-btns");
+			var btnsHtml = "";
+			btnsHtml += '<button class="btn btn--sm btn--outline" ' + (state.page <= 1 ? "disabled" : "") + ' onclick="window.vsAdmin.goPage(' + (state.page - 1) + ')">← Trước</button>';
+			var startP = Math.max(1, state.page - 2);
+			var endP = Math.min(maxPage, startP + 4);
+			for (var p = startP; p <= endP; p++) {
+				btnsHtml += '<button class="btn btn--sm ' + (p === state.page ? "btn--primary" : "btn--outline") + '" onclick="window.vsAdmin.goPage(' + p + ')">' + p + '</button>';
+			}
+			btnsHtml += '<button class="btn btn--sm btn--outline" ' + (state.page >= maxPage ? "disabled" : "") + ' onclick="window.vsAdmin.goPage(' + (state.page + 1) + ')">Sau →</button>';
+			btnsEl.innerHTML = btnsHtml;
+		}
+
+		function renderCategoriesTable() {
+			var tbody = document.getElementById("cats-tbody");
+			var rawQ = document.getElementById("cat-search").value.trim().toLowerCase();
+			var q = slugifyVN(rawQ).replace(/-/g, " ");
+
+			var filtered = state.categories.filter(function (c) {
+				if (!rawQ) return true;
+				var hay = (c.title + " " + c.slug + " " + (c.description || "")).toLowerCase();
+				var hayNorm = slugifyVN(hay).replace(/-/g, " ");
+				return hay.indexOf(rawQ) !== -1 || hayNorm.indexOf(q) !== -1;
+			});
+
+			if (!filtered.length) {
+				tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 36px; color: var(--text-muted);">Không tìm thấy thể loại nào.</td></tr>';
+				return;
+			}
+
+			tbody.innerHTML = filtered.map(function (c) {
+				return '<tr>' +
+					'<td><span class="item-title" onclick="window.vsAdmin.openEditCat(\'' + escapeHtml(c.folder) + '\')">' + escapeHtml(c.title) + '</span></td>' +
+					'<td><a class="item-url" href="' + escapeHtml(c.url) + '" target="_blank">' + escapeHtml(c.url) + ' ↗</a></td>' +
+					'<td style="color:var(--text-muted); font-size:0.86rem;">' + escapeHtml(c.description || "") + '</td>' +
+					'<td>' +
+						'<button type="button" class="btn btn--sm btn--outline" onclick="window.vsAdmin.filterByCategory(\'' + escapeHtml(c.title.replace(/'/g, "\\'")) + '\')" title="Xem các bài đăng thuộc thể loại này">' +
+							c.count + ' bài viết' +
+						'</button>' +
+					'</td>' +
+					'<td style="text-align: right;">' +
+						'<div class="row-actions" style="justify-content: flex-end;">' +
+							'<button type="button" class="btn btn--sm btn--outline" onclick="window.vsAdmin.openEditCat(\'' + escapeHtml(c.folder) + '\')">✏️ Sửa</button>' +
+							'<button type="button" class="btn btn--sm btn--danger" onclick="window.vsAdmin.confirmDeleteCat(\'' + escapeHtml(c.folder) + '\', \'' + escapeHtml(c.title.replace(/'/g, "\\'")) + '\', ' + c.count + ')">🗑️ Xóa</button>' +
+						'</div>' +
+					'</td>' +
+				'</tr>';
+			}).join("");
+		}
+
+		function switchTab(tab) {
+			state.activeTab = tab;
+			state.page = 1;
+			document.querySelectorAll(".nav-btn").forEach(function (btn) {
+				btn.classList.toggle("active", btn.dataset.tab === tab);
+			});
+
+			var viewPosts = document.getElementById("view-posts");
+			var viewCats = document.getElementById("view-categories");
+			var createBtn = document.getElementById("btn-primary-create");
+			var catFilter = document.getElementById("post-cat-filter");
+
+			if (tab === "categories") {
+				viewPosts.hidden = true;
+				viewCats.hidden = false;
+				document.getElementById("topbar-title").textContent = "Quản lý Thể loại";
+				createBtn.textContent = "+ Thêm thể loại mới";
+				renderCategoriesTable();
+			} else if (tab === "pages") {
+				viewPosts.hidden = false;
+				viewCats.hidden = true;
+				catFilter.hidden = true;
+				document.getElementById("topbar-title").textContent = "Quản lý Trang tĩnh";
+				createBtn.textContent = "+ Thêm trang tĩnh mới";
+				renderPostsTable();
+			} else {
+				viewPosts.hidden = false;
+				viewCats.hidden = true;
+				catFilter.hidden = false;
+				document.getElementById("topbar-title").textContent = "Quản lý Bài đăng";
+				createBtn.textContent = "+ Thêm bài đăng mới";
+				renderPostsTable();
+			}
+		}
+
+		function filterByCategory(catTitle) {
+			document.getElementById("post-cat-filter").value = catTitle;
+			switchTab("posts");
+		}
+
+		// POST MODAL LOGIC
+		function renderCategoryPillsInModal(selectedCats) {
+			var box = document.getElementById("post-cats-box");
+			var selSet = new Set(selectedCats || []);
+			box.innerHTML = state.categories.map(function (c) {
+				var checked = selSet.has(c.title);
+				return '<label class="cat-pill ' + (checked ? "checked" : "") + '">' +
+					'<input type="checkbox" value="' + escapeHtml(c.title) + '" ' + (checked ? "checked" : "") + ' onchange="window.vsAdmin.onCatPillChange(this)">' +
+					'<span>' + escapeHtml(c.title) + '</span>' +
+				'</label>';
+			}).join("");
+		}
+
+		function onCatPillChange(checkbox) {
+			checkbox.parentElement.classList.toggle("checked", checkbox.checked);
+			autoUpdatePostUrl();
+		}
+
+		function getSelectedModalCategories() {
+			var checked = [];
+			document.querySelectorAll("#post-cats-box input[type=checkbox]:checked").forEach(function (cb) {
+				checked.push(cb.value);
+			});
+			return checked;
+		}
+
+		function autoUpdatePostUrl() {
+			if (state.editingFilename) return; // Don't overwrite URL automatically when editing existing post
+			var slug = document.getElementById("post-slug").value.trim();
+			if (!slug) return;
+			if (state.activeTab === "pages") {
+				document.getElementById("post-url").value = "/" + slug;
+				return;
+			}
+			var cats = getSelectedModalCategories();
+			var primaryCat = cats[0] || "chua-phan-loai";
+			var catObj = state.categories.find(function (c) { return c.title === primaryCat; });
+			var catSlug = catObj ? catObj.slug : slugifyVN(primaryCat);
+			document.getElementById("post-url").value = "/" + catSlug + "/" + slug;
+		}
+
+		function openCreatePostModal() {
+			var scope = (state.activeTab === "pages") ? "pages" : "posts";
+			var activeCat = document.getElementById("post-cat-filter").value;
+			var url = "/admin/editor.html?scope=" + scope;
+			if (scope === "posts" && activeCat) {
+				url += "&cat=" + encodeURIComponent(activeCat);
+			}
+			window.location.href = url;
+		}
+
+		function openEditPost(filename) {
+			var scope = (state.activeTab === "pages") ? "pages" : "posts";
+			window.location.href = "/admin/editor.html?file=" + encodeURIComponent(filename) + "&scope=" + scope;
+		}
+
+		function closePostModal() {
+			document.getElementById("modal-post").hidden = true;
+		}
+
+		function setEditorMode(mode) {
+			var visualEl = document.getElementById("editor-visual");
+			var htmlEl = document.getElementById("editor-html");
+			if (mode === "html" && state.editorMode === "visual") {
+				htmlEl.value = visualEl.innerHTML.trim();
+			} else if (mode === "visual" && state.editorMode === "html") {
+				visualEl.innerHTML = htmlEl.value;
+			}
+			state.editorMode = mode;
+			visualEl.hidden = (mode !== "visual");
+			htmlEl.hidden = (mode !== "html");
+			document.getElementById("visual-toolbar").style.visibility = (mode === "visual") ? "visible" : "hidden";
+			document.getElementById("btn-mode-visual").classList.toggle("active", mode === "visual");
+			document.getElementById("btn-mode-html").classList.toggle("active", mode === "html");
+		}
+
+		function setEditorContent(htmlContent) {
+			document.getElementById("editor-visual").innerHTML = htmlContent || "";
+			document.getElementById("editor-html").value = htmlContent || "";
+		}
+
+		function getEditorContent() {
+			if (state.editorMode === "html") {
+				return document.getElementById("editor-html").value.trim();
+			}
+			return document.getElementById("editor-visual").innerHTML.trim();
+		}
+
+		function execCmd(cmd, val) {
+			document.getElementById("editor-visual").focus();
+			document.execCommand(cmd, false, val || null);
+		}
+
+		function execBlock(tag) {
+			document.getElementById("editor-visual").focus();
+			document.execCommand("formatBlock", false, tag);
+		}
+
+		function insertLink() {
+			var url = prompt("Nhập đường dẫn URL (ví dụ: https://...):");
+			if (url) execCmd("createLink", url);
+		}
+
+		function insertYoutube() {
+			var input = prompt("Nhập link YouTube (ví dụ: https://www.youtube.com/watch?v=xxxxxx):");
+			if (!input) return;
+			var m = input.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+			var vid = m ? m[1] : input.trim();
+			var embedHtml = '<p><iframe width="560" height="315" src="https://www.youtube.com/embed/' + escapeHtml(vid) + '" frameborder="0" allowfullscreen></iframe></p>';
+			insertHtmlIntoEditor(embedHtml);
+		}
+
+		function insertHtmlIntoEditor(snippet) {
+			if (state.editorMode === "html") {
+				var area = document.getElementById("editor-html");
+				area.value += "\n" + snippet;
+			} else {
+				var vis = document.getElementById("editor-visual");
+				vis.focus();
+				document.execCommand("insertHTML", false, snippet);
+			}
+		}
+
+		function fileToBase64(file) {
+			return new Promise(function (resolve, reject) {
+				var reader = new FileReader();
+				reader.onload = function () { resolve(reader.result); };
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+		}
+
+		async function handleThumbUpload(inputEl) {
+			var file = inputEl.files && inputEl.files[0];
+			if (!file) return;
+			try {
+				toast("Đang tải ảnh lên...");
+				var b64 = await fileToBase64(file);
+				var res = await apiFetch("/api/upload", {
+					method: "POST",
+					body: JSON.stringify({ filename: file.name, data: b64 })
+				});
+				document.getElementById("post-thumb").value = res.url;
+				updateThumbPreview(res.url);
+				toast("Đã tải ảnh đại diện lên thành công!");
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				inputEl.value = "";
+			}
+		}
+
+		async function handleInlineUpload(inputEl) {
+			var file = inputEl.files && inputEl.files[0];
+			if (!file) return;
+			try {
+				toast("Đang tải file lên...");
+				var b64 = await fileToBase64(file);
+				var res = await apiFetch("/api/upload", {
+					method: "POST",
+					body: JSON.stringify({ filename: file.name, data: b64 })
+				});
+				if (file.type.indexOf("audio/") === 0 || /\.mp3$|\.m4a$|\.wav$/i.test(file.name)) {
+					insertHtmlIntoEditor('<p><audio controls src="' + res.url + '"></audio></p>');
+				} else {
+					insertHtmlIntoEditor('<p><img src="' + res.url + '" alt="' + escapeHtml(file.name) + '"></p>');
+				}
+				toast("Đã chèn file vào bài viết!");
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				inputEl.value = "";
+			}
+		}
+
+		function updateThumbPreview(url) {
+			var wrap = document.getElementById("thumb-preview-wrap");
+			var img = document.getElementById("thumb-preview");
+			if (url && url.trim()) {
+				img.src = url.trim();
+				wrap.hidden = false;
+			} else {
+				wrap.hidden = true;
+			}
+		}
+
+		async function savePost() {
+			var title = document.getElementById("post-title").value.trim();
+			if (!title) {
+				toast("Vui lòng nhập tiêu đề bài viết!", "error");
+				return;
+			}
+			var scope = (state.activeTab === "pages") ? "pages" : "posts";
+			var cats = getSelectedModalCategories();
+			if (scope === "posts" && !cats.length) {
+				toast("Vui lòng chọn ít nhất 1 thể loại!", "error");
+				return;
+			}
+			var tags = document.getElementById("post-tags").value
+				.split(",")
+				.map(function (s) { return s.trim(); })
+				.filter(Boolean);
+			var aliases = document.getElementById("post-aliases").value
+				.split(",")
+				.map(function (s) { return s.trim(); })
+				.filter(Boolean);
+
+			var payload = {
+				scope: scope,
+				title: title,
+				slug: document.getElementById("post-slug").value.trim() || slugifyVN(title),
+				url: document.getElementById("post-url").value.trim(),
+				categories: cats,
+				tags: tags,
+				date: document.getElementById("post-date").value,
+				draft: document.getElementById("post-draft").value === "true",
+				thumbnail: document.getElementById("post-thumb").value.trim(),
+				description: document.getElementById("post-desc").value.trim(),
+				aliases: aliases,
+				body: getEditorContent()
+			};
+
+			var btn = document.getElementById("btn-save-post");
+			btn.disabled = true;
+			btn.textContent = "Đang lưu...";
+			try {
+				if (state.editingFilename) {
+					var res = await apiFetch("/api/posts/" + encodeURIComponent(state.editingFilename) + "?scope=" + scope, {
+						method: "PUT",
+						body: JSON.stringify(payload)
+					});
+					toast(res.message);
+				} else {
+					var res = await apiFetch("/api/posts?scope=" + scope, {
+						method: "POST",
+						body: JSON.stringify(payload)
+					});
+					toast(res.message);
+				}
+				closePostModal();
+				await Promise.all([loadCategories(), loadPosts(), loadPages()]);
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				btn.disabled = false;
+				btn.textContent = "💾 Lưu bài đăng";
+			}
+		}
+
+		async function confirmDeletePost(filename, title) {
+			if (!confirm("Bạn có chắc chắn muốn XÓA bài viết:\n\"" + title + "\" (" + filename + ") không?")) {
+				return;
+			}
+			try {
+				var scope = (state.activeTab === "pages") ? "pages" : "posts";
+				var res = await apiFetch("/api/posts/" + encodeURIComponent(filename) + "?scope=" + scope, {
+					method: "DELETE"
+				});
+				toast(res.message);
+				closePostModal();
+				await Promise.all([loadCategories(), loadPosts(), loadPages()]);
+			} catch (err) {
+				toast(err.message, "error");
+			}
+		}
+
+		function deleteCurrentPost() {
+			if (!state.editingFilename) return;
+			var title = document.getElementById("post-title").value;
+			confirmDeletePost(state.editingFilename, title);
+		}
+
+		// CATEGORY MODAL LOGIC
+		function openCreateCatModal() {
+			state.editingCatFolder = null;
+			document.getElementById("modal-cat-title").textContent = "Thêm thể loại mới";
+			document.getElementById("cat-folder").value = "";
+			document.getElementById("cat-old-title").value = "";
+			document.getElementById("cat-title").value = "";
+			document.getElementById("cat-slug").value = "";
+			document.getElementById("cat-url").value = "";
+			document.getElementById("cat-desc").value = "";
+			document.getElementById("modal-cat").hidden = false;
+			document.getElementById("cat-title").focus();
+		}
+
+		function openEditCat(folder) {
+			var cat = state.categories.find(function (c) { return c.folder === folder; });
+			if (!cat) return;
+			state.editingCatFolder = cat.folder;
+			document.getElementById("modal-cat-title").textContent = "Chỉnh sửa thể loại: " + cat.title;
+			document.getElementById("cat-folder").value = cat.folder;
+			document.getElementById("cat-old-title").value = cat.title;
+			document.getElementById("cat-title").value = cat.title;
+			document.getElementById("cat-slug").value = cat.slug;
+			document.getElementById("cat-url").value = cat.url;
+			document.getElementById("cat-desc").value = cat.description || "";
+			document.getElementById("modal-cat").hidden = false;
+		}
+
+		function closeCatModal() {
+			document.getElementById("modal-cat").hidden = true;
+		}
+
+		async function saveCat() {
+			var title = document.getElementById("cat-title").value.trim();
+			if (!title) {
+				toast("Vui lòng nhập tên thể loại!", "error");
+				return;
+			}
+			var slug = document.getElementById("cat-slug").value.trim() || slugifyVN(title);
+			var url = document.getElementById("cat-url").value.trim() || ("/category/" + slug + "/");
+			var desc = document.getElementById("cat-desc").value.trim();
+			var oldTitle = document.getElementById("cat-old-title").value.trim();
+
+			var btn = document.getElementById("btn-save-cat");
+			btn.disabled = true;
+			try {
+				if (state.editingCatFolder) {
+					var res = await apiFetch("/api/categories/" + encodeURIComponent(state.editingCatFolder), {
+						method: "PUT",
+						body: JSON.stringify({ title: title, slug: slug, url: url, description: desc, oldTitle: oldTitle })
+					});
+					toast(res.message);
+				} else {
+					var res = await apiFetch("/api/categories", {
+						method: "POST",
+						body: JSON.stringify({ title: title, slug: slug, url: url, description: desc })
+					});
+					toast(res.message);
+				}
+				closeCatModal();
+				await Promise.all([loadCategories(), loadPosts()]);
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				btn.disabled = false;
+			}
+		}
+
+		async function confirmDeleteCat(folder, title, count) {
+			var msg = "Bạn có chắc chắn muốn XÓA thể loại \"" + title + "\" không?";
+			if (count > 0) {
+				msg += "\n\nLưu ý: Có " + count + " bài viết đang thuộc thể loại này sẽ được gỡ thể loại \"" + title + "\".";
+			}
+			if (!confirm(msg)) return;
+			try {
+				var res = await apiFetch("/api/categories/" + encodeURIComponent(folder) + "?title=" + encodeURIComponent(title), {
+					method: "DELETE"
+				});
+				toast(res.message);
+				await Promise.all([loadCategories(), loadPosts()]);
+			} catch (err) {
+				toast(err.message, "error");
+			}
+		}
+
+		async function quickAddCategory() {
+			var name = prompt("Nhập tên thể loại mới:");
+			if (!name || !name.trim()) return;
+			name = name.trim();
+			try {
+				var selected = getSelectedModalCategories();
+				var res = await apiFetch("/api/categories", {
+					method: "POST",
+					body: JSON.stringify({ title: name })
+				});
+				toast(res.message);
+				await loadCategories();
+				selected.push(name);
+				renderCategoryPillsInModal(selected);
+				autoUpdatePostUrl();
+			} catch (err) {
+				toast(err.message, "error");
+			}
+		}
+
+		function regenPostSlug() {
+			var title = document.getElementById("post-title").value;
+			var s = slugifyVN(title);
+			document.getElementById("post-slug").value = s;
+			var cats = getSelectedModalCategories();
+			var primaryCat = cats[0] || "chua-phan-loai";
+			var catObj = state.categories.find(function (c) { return c.title === primaryCat; });
+			var catSlug = catObj ? catObj.slug : slugifyVN(primaryCat);
+			document.getElementById("post-url").value = (state.activeTab === "pages") ? ("/" + s) : ("/" + catSlug + "/" + s);
+		}
+
+		// Event Listeners
+		document.querySelectorAll(".nav-btn").forEach(function (btn) {
+			btn.addEventListener("click", function () {
+				switchTab(btn.dataset.tab);
+			});
+		});
+
+		document.getElementById("btn-primary-create").addEventListener("click", function () {
+			if (state.activeTab === "categories") {
+				openCreateCatModal();
+			} else {
+				openCreatePostModal();
+			}
+		});
+
+		document.getElementById("btn-rebuild").addEventListener("click", async function () {
+			var btn = document.getElementById("btn-rebuild");
+			var origText = btn.innerHTML;
+			btn.disabled = true;
+			btn.innerHTML = "⏳ Đang đồng bộ &amp; build...";
+			sessionStorage.setItem("vs_rebuilding", "1");
+			try {
+				toast("⏳ Đang đồng bộ chỉ mục tìm kiếm và build lại Hugo...");
+				var res = await apiFetch("/api/rebuild", { method: "POST" });
+				sessionStorage.removeItem("vs_rebuilding");
+				var msg = res.message || "✅ Đã đồng bộ dữ liệu và build lại Website thành công!";
+				showSyncSuccessBanner(msg);
+				toast(msg, "success");
+				var st = await apiFetch("/api/status");
+				updateStatsUI(st.stats);
+				await Promise.all([loadCategories(), loadPosts(), loadPages()]);
+			} catch (err) {
+				sessionStorage.removeItem("vs_rebuilding");
+				toast(err.message, "error");
+			} finally {
+				btn.disabled = false;
+				btn.innerHTML = origText;
+			}
+		});
+
+		["post-search", "post-cat-filter", "post-status-filter", "post-sort"].forEach(function (id) {
+			document.getElementById(id).addEventListener("input", function () {
+				state.page = 1;
+				renderPostsTable();
+			});
+			document.getElementById(id).addEventListener("change", function () {
+				state.page = 1;
+				renderPostsTable();
+			});
+		});
+
+		document.getElementById("cat-search").addEventListener("input", renderCategoriesTable);
+
+		document.getElementById("post-title").addEventListener("input", function () {
+			if (!state.editingFilename) {
+				document.getElementById("post-slug").value = slugifyVN(this.value);
+				autoUpdatePostUrl();
+			}
+		});
+
+		document.getElementById("post-slug").addEventListener("input", autoUpdatePostUrl);
+
+		document.getElementById("post-thumb").addEventListener("input", function () {
+			updateThumbPreview(this.value);
+		});
+
+		document.getElementById("cat-title").addEventListener("input", function () {
+			if (!state.editingCatFolder) {
+				var s = slugifyVN(this.value);
+				document.getElementById("cat-slug").value = s;
+				document.getElementById("cat-url").value = s ? ("/category/" + s + "/") : "";
+			}
+		});
+
+		document.getElementById("cat-slug").addEventListener("input", function () {
+			var s = slugifyVN(this.value);
+			document.getElementById("cat-url").value = s ? ("/category/" + s + "/") : "";
+		});
+
+		init();
+
+		return {
+			init: init,
+			goPage: function (p) { state.page = p; renderPostsTable(); },
+			openEditPost: openEditPost,
+			closePostModal: closePostModal,
+			savePost: savePost,
+			confirmDeletePost: confirmDeletePost,
+			deleteCurrentPost: deleteCurrentPost,
+			setEditorMode: setEditorMode,
+			execCmd: execCmd,
+			execBlock: execBlock,
+			insertLink: insertLink,
+			insertYoutube: insertYoutube,
+			handleThumbUpload: handleThumbUpload,
+			handleInlineUpload: handleInlineUpload,
+			onCatPillChange: onCatPillChange,
+			quickAddCategory: quickAddCategory,
+			regenPostSlug: regenPostSlug,
+			openEditCat: openEditCat,
+			closeCatModal: closeCatModal,
+			saveCat: saveCat,
+			confirmDeleteCat: confirmDeleteCat,
+			filterByCategory: filterByCategory
+		};
+	})();
+	</script>
+</body>
+</html>
+

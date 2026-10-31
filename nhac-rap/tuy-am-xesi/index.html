@@ -149,8 +149,10 @@
 			<h1 class="post__title">Túy âm - Xesi</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-11-18T15:37:39&#43;07:00">tháng 11 18, 2018</time>
-	<time class="meta__text" datetime="2018-12-08T19:38:22&#43;07:00">(Cập nhật lần cuối: tháng 12 08, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-rap/" rel="category">Nhạc Rap</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-11-18T15:37:39&#43;07:00">18/11/2018</time>
+	<time class="meta__text" datetime="2018-12-08T19:38:22&#43;07:00">(Cập nhật lần cuối: 08/12/2018)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-rap/" rel="category">Nhạc Rap</a>
 	</span>
 </div>
 
@@ -165,7 +167,6 @@
 <p style="text-align: justify;">".. Hóa là một môn học yêu thích của mình, mình cũng thích viết nhạc nữa nên mình lấy Xesi - tên của một nguyên tố hóa học rất đặt biệt để làm nghệ danh. Cái tên Xesi sẽ là sợi dây liên kết, đi cùng mình xuyên suốt các tác phẩm cũng như trong quá trình hoạt động âm nhạc .." - Trần Hải Yến (Xesi)</p>
 <blockquote>Nguồn tư liệu:
 + <a href="http://kenh14.vn/tac-gia-ban-hit-gan-40-trieu-luot-nghe-tuy-am-co-nu-sinh-chuyen-hoa-10x-chua-tung-duoc-hoc-nhac-20170926215445258.chn" target="_blank" rel="noopener">http://kenh14.vn/</a> (Tác giả bản hit gần 40 triệu lượt nghe "Túy âm": Cô nữ sinh chuyên Hóa 10X chưa từng được học nhạc!)</blockquote>
-<p style="text-align: center;"><iframe src="//www.youtube.com/embed/EV-91JV4Fws" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
 </div>
 
 		</div>
@@ -290,6 +291,18 @@
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

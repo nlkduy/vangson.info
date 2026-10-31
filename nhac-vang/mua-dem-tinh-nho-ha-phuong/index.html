@@ -150,8 +150,10 @@
 			<h1 class="post__title">Hà Phương: Mùa mưa đi qua, Mưa qua phố vắng, Mưa đêm tỉnh nhỏ</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-08-03T09:05:02&#43;07:00">tháng 8 03, 2018</time>
-	<time class="meta__text" datetime="2018-12-22T21:19:32&#43;07:00">(Cập nhật lần cuối: tháng 12 22, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-08-03T09:05:02&#43;07:00">03/08/2018</time>
+	<time class="meta__text" datetime="2018-12-22T21:19:32&#43;07:00">(Cập nhật lần cuối: 22/12/2018)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
 	</span>
 </div>
 
@@ -181,7 +183,6 @@ mưa len ướt gót son rồi mưa ơi</p>
 đường về nhà em mưa lất phất mưa bay<br>
 con đường buồn hun hút đã xanh xao<br>
 mưa nhạt mưa nhòa mưa đổ trên cao ..</p>
-<iframe src="//www.youtube.com/embed/xUaEqKtmk7g" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <p><strong>Mưa qua phố vắng</strong></p>
 <p>Mưa hắt hiu mưa buồn qua phố vắng<br>
 chiều mưa tuôn cho giá buốt tâm hồn<br>
@@ -201,7 +202,6 @@ trông bóng ai ngoài mưa .. mà nhớ người</p>
 người yêu xưa nay đã cách xa rồi<br>
 còn trong tôi bao nhung nhớ tả tơi<br>
 mưa kỷ niệm mưa thầm rơi trong đời ..</p>
-<iframe src="//www.youtube.com/embed/hn_NMxn18NE" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <p><strong>Mưa đêm tỉnh nhỏ - Hà Phương &amp; Anh Việt Thanh<br>
 </strong></p>
 <p style="text-align: justify;">Nhạc sĩ Hà Phương tâm sự: <em>“Tình yêu đầu đời là những kỷ niệm sâu sắc. Đó là những đêm trên sân khấu tôi đệm đàn cho nàng hát tình khúc do tôi sáng tác. Sau đó, hai đứa dìu nhau dưới những đêm mưa buồn nơi tỉnh lẻ, ánh đèn mờ ảo, phố vắng thưa người .. Ôi nhớ sao là nhớ!</em>”.</p>
@@ -229,7 +229,6 @@ và từ đó, những đêm trời mưa gió<br>
 thấu chăng người tỉnh nhỏ<br>
 nuôi nấng cả một đời, mối tình thời xa ấy<br>
 giờ đây đường hai lối mưa gió về buồn nào nguôi ..</p>
-<iframe src="//www.youtube.com/embed/sPg3lJJj6Ks" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 
 		</div>
 		<footer class="post__footer">
@@ -366,6 +365,18 @@ giờ đây đường hai lối mưa gió về buồn nào nguôi ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

@@ -150,8 +150,10 @@
 			<h1 class="post__title">Ngô Thụy Miên: Niệm khúc cuối, Riêng một góc trời</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-09-15T18:32:22&#43;07:00">tháng 9 15, 2018</time>
-	<time class="meta__text" datetime="2018-09-21T23:20:39&#43;07:00">(Cập nhật lần cuối: tháng 9 21, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-09-15T18:32:22&#43;07:00">15/09/2018</time>
+	<time class="meta__text" datetime="2018-09-21T23:20:39&#43;07:00">(Cập nhật lần cuối: 21/09/2018)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
 	</span>
 </div>
 
@@ -181,7 +183,6 @@ yêu thương vợ chồng</p>
 dù cho em, em đang tâm xé, xé nát tim tôi<br>
 dù có ước, có ước ngàn lời, có trách một đời, cũng đã muộn rồi<br>
 tình ơi, dù sao đi nữa xin vẫn yêu em ..</p>
-<iframe src="//www.youtube.com/embed/SfnBR3geXTk" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <p><strong>Riêng Một Góc Trời</strong></p>
 <p style="text-align: justify;"><em>"Được viết ở hải ngoại năm 1996. 'Đời như sương khói, mơ hồ trong bóng tối / Em đã xa xôi, tôi vẫn chơi vơi, riêng một góc trời' .. Nếu hạnh phúc là những kỷ niệm sáng nắng chiều mưa của một thời, là những tàng lá úa rơi buồn trong nỗi nhớ hay những nụ hôn, những giọt nước mắt lặng lẽ vẫn chìm sâu trong trí tưởng .. thì 'Riêng Một Góc Trời' đã là một người bạn đồng hành tuyệt vời cho những tâm hồn đã yêu, đang yêu và mãi sẽ còn yêu .."</em></p>
 Tình yêu như nắng, nắng đưa em về, bên giòng suối mơ
@@ -202,7 +203,6 @@ là chia cách đôi nơi, là hạnh phúc rã rời, người ơi</p>
 ngàn sao lấp lánh, hát câu mong chờ, em về lối xưa<br>
 hạ còn nắng ấm, thấy lòng sao buốt giá<br>
 gọi tên em mãi, trong cơn mê này, mình nhớ thương nhau ..</p>
-<iframe src="//www.youtube.com/embed/pJ9Gyw0Jtlw" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <blockquote>Nguồn tư liệu:
 + <a href="http://saigonocean.com/nhacchude/html/NTM-phongvan1.htm" target="_blank" rel="noopener">http://saigonocean.com/</a> (Nhạc sĩ Ngô Thụy Miên, một đời cho tình ca)</blockquote>
 
@@ -341,6 +341,18 @@ gọi tên em mãi, trong cơn mê này, mình nhớ thương nhau ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

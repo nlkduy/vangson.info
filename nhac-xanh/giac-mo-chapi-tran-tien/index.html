@@ -150,8 +150,9 @@
 			<h1 class="post__title">Giấc mơ Chapi - Trần Tiến</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-11-25T15:54:33&#43;07:00">tháng 11 25, 2018</time>
-	<time class="meta__text" datetime="2018-11-25T16:26:58&#43;07:00">(Cập nhật lần cuối: tháng 11 25, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-xanh/" rel="category">Nhạc Xanh</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-11-25T15:54:33&#43;07:00">25/11/2018</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-xanh/" rel="category">Nhạc Xanh</a>
 	</span>
 </div>
 
@@ -160,7 +161,6 @@
 		<div class="content post__content clearfix">
 			<p style="text-align: justify;">Chuyện kể trong lần lang thang giữa núi rừng Ninh Thuận để tìm kiếm một loại nhạc cụ dân tộc mang đi giới thiệu tại Pháp, nhạc sĩ tình cờ nghe thấy tiếng đàn vang lên từ ngôi nhà sàn đơn sơ, tách biệt giữa đại ngàn. Trong ngôi nhà không có lấy một vật dụng bằng kim khí.</p>
 <p style="text-align: justify;">Khi nhạc sĩ ngỏ ý muốn mua lại cây đàn, người chồng nói: <em>“Nếu anh thích, tôi sẽ tặng anh. Tôi không bán đâu vì đã mười mấy năm rồi tôi không dùng đến tiền”</em>. Nhạc sĩ gốc Hà Nội khi ấy rất ngạc nhiên bởi vẫn còn nơi người ta có thể vui sống mà không màng vật chất. Đời sống chan hoà với muông thú, ruộng đồng và niềm hạnh phúc có nhau là tất cả mà gia đình nhỏ ấy cần ..</p>
-<p style="text-align: center;"><iframe src="//www.youtube.com/embed/vgtHh_u_gLA" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
 <blockquote>Nguồn tư liệu:
 + <a href="https://news.zing.vn/tran-tien-ke-lang-du-cua-lang-nhac-viet-post878036" target="_blank" rel="noopener">https://news.zing.vn/</a> (Trần Tiến - kẻ lãng du của làng nhạc Việt)</blockquote>
 <p><strong>Lời bài hát</strong></p>
@@ -179,7 +179,6 @@ ai yêu tự do yêu rừng xanh thì lên núi nghe đàn Chapi</p>
 <p>Tôi yêu Chapi không còn cô đơn, không buồn, không vui<br>
 tôi nghe Chapi chợt thấy nao lòng<br>
 vì một giấc mơ .. hỡi Chapi ..</p>
-<iframe src="//www.youtube.com/embed/Aq7ItUDHR9k" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 
 		</div>
 		<footer class="post__footer">
@@ -316,6 +315,18 @@ vì một giấc mơ .. hỡi Chapi ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

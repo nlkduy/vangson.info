@@ -16,7 +16,7 @@
 	<meta itemprop="name" content="Tags">
 	<meta itemprop="description" content="Thư viện giai thoại âm nhạc xưa và nay">
 	<meta itemprop="datePublished" content="2026-07-04T09:26:23+07:00">
-	<meta itemprop="dateModified" content="2026-07-05T09:04:29+07:00">
+	<meta itemprop="dateModified" content="2026-10-31T10:25:21+07:00">
     
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:title" content="Tags">
@@ -162,6 +162,13 @@
 		</article>
 		<article class="related-posts__item">
 			<h2 class="related-posts__title">
+				<a href="/tag/cao-v%C4%83n-l%E1%BA%A7u/" rel="bookmark">Cao Văn Lầu</a>
+			</h2>
+			<div class="related-posts__meta">
+				<time datetime="2018-09-30">30/09/2018</time></div>
+		</article>
+		<article class="related-posts__item">
+			<h2 class="related-posts__title">
 				<a href="/tag/paul-anka/" rel="bookmark">Paul Anka</a>
 			</h2>
 			<div class="related-posts__meta">
@@ -231,6 +238,13 @@
 			<div class="related-posts__meta">
 				<time datetime="2018-02-14">14/02/2018</time></div>
 			<p class="related-posts__excerpt">Thẻ Hoàng Việt trên Vàng Son</p>
+		</article>
+		<article class="related-posts__item">
+			<h2 class="related-posts__title">
+				<a href="/tag/cao-van-lau/" rel="bookmark">Cao Văn Lầu</a>
+			</h2>
+			<div class="related-posts__meta">
+				<time datetime="0001-01-01">01/01/0001</time></div>
 		</article>
 		<article class="related-posts__item">
 			<h2 class="related-posts__title">
@@ -304,6 +318,18 @@
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

@@ -3,16 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://vangson.info/categories/</loc>
-    <lastmod>2026-07-05T09:04:29+07:00</lastmod>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/tho-pho-nhac/loi-hen-cung-ca-dao-vinh-su/</loc>
     <lastmod>2026-07-05T08:50:44+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/posts/</loc>
-    <lastmod>2026-07-05T09:04:29+07:00</lastmod>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/tags/</loc>
-    <lastmod>2026-07-05T09:04:29+07:00</lastmod>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/tag/thanh-nguyen/</loc>
     <lastmod>2026-07-05T08:50:55+07:00</lastmod>
@@ -21,7 +21,7 @@
     <lastmod>2026-07-05T08:50:55+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/</loc>
-    <lastmod>2026-07-05T09:04:29+07:00</lastmod>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/tag/vinh-su/</loc>
     <lastmod>2026-07-05T09:04:29+07:00</lastmod>
@@ -2853,7 +2853,7 @@
     <lastmod>2018-12-08T19:54:08+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/category/nhac-cai-luong/</loc>
-    <lastmod>2021-04-23T00:53:16+07:00</lastmod>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/nhac-cai-luong/tinh-anh-ban-chieu-vien-chau/</loc>
     <lastmod>2021-04-23T00:53:16+07:00</lastmod>
@@ -3041,8 +3041,11 @@
     <loc>https://vangson.info/nhac-vang/buon-oi-chao-mi-nguyen-anh-9/</loc>
     <lastmod>2018-09-30T16:48:43+07:00</lastmod>
   </url><url>
+    <loc>https://vangson.info/tag/cao-v%C4%83n-l%E1%BA%A7u/</loc>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
+  </url><url>
     <loc>https://vangson.info/nhac-cai-luong/da-co-hoai-lang-cao-van-lau/</loc>
-    <lastmod>2018-12-08T18:15:28+07:00</lastmod>
+    <lastmod>2026-10-31T10:25:21+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/nhac-xanh/thanh-pho-tre-tran-tien/</loc>
     <lastmod>2021-06-29T12:01:26+07:00</lastmod>
@@ -4935,6 +4938,8 @@
     <lastmod>2018-10-31T10:23:25+07:00</lastmod>
   </url><url>
     <loc>https://vangson.info/authors/</loc>
+  </url><url>
+    <loc>https://vangson.info/tag/cao-van-lau/</loc>
   </url><url>
     <loc>https://vangson.info/category/chua-phan-loai/</loc>
   </url><url>

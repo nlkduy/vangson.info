@@ -13,15 +13,16 @@
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="posts">
 		<meta property="article:published_time" content="2018-09-30T16:41:32+07:00">
-		<meta property="article:modified_time" content="2018-12-08T18:15:28+07:00">
+		<meta property="article:modified_time" content="2026-10-31T10:25:21+07:00">
+		<meta property="article:tag" content="Cao Văn Lầu">
 
     
 	<meta itemprop="name" content="Dạ cổ hoài lang - Cao Văn Lầu">
 	<meta itemprop="description" content="Tôi đặt bài này bởi tôi rất thương vợ. Năm viết bản &amp;;Dạ Cổ Hoài Lang&amp;;, tôi đã ăn ở với vợ tôi được 3 năm mà không có con. Tam niên vô tử bất thành thê ..">
 	<meta itemprop="datePublished" content="2018-09-30T16:41:32+07:00">
-	<meta itemprop="dateModified" content="2018-12-08T18:15:28+07:00">
+	<meta itemprop="dateModified" content="2026-10-31T10:25:21+07:00">
 	<meta itemprop="wordCount" content="539">
-	<meta itemprop="keywords" content="Nhạc Cải Lương">
+	<meta itemprop="keywords" content="Cao Văn Lầu">
     
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:title" content="Dạ cổ hoài lang - Cao Văn Lầu">
@@ -149,8 +150,10 @@
 			<h1 class="post__title">Dạ cổ hoài lang - Cao Văn Lầu</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-09-30T16:41:32&#43;07:00">tháng 9 30, 2018</time>
-	<time class="meta__text" datetime="2018-12-08T18:15:28&#43;07:00">(Cập nhật lần cuối: tháng 12 08, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-cai-luong/" rel="category">Nhạc Cải Lương</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-09-30T16:41:32&#43;07:00">30/09/2018</time>
+	<time class="meta__text" datetime="2026-10-31T10:25:21&#43;07:00">(Cập nhật lần cuối: 31/10/2026)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-cai-luong/" rel="category">Nhạc Cải Lương</a>
 	</span>
 </div>
 
@@ -186,10 +189,22 @@ duyên sắt cầm đừng lợt phai í a</p>
 nguyện cho chàng đặng chữ an - bình an<br>
 mau trở lại gia đàng<br>
 cho én nhạn hiệp đôi ..</p>
-<iframe src="//www.youtube.com/embed/QQ9S_vZl0bg" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 </div>
 
 		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tag/cao-v%C4%83n-l%E1%BA%A7u/" rel="tag">Cao Văn Lầu</a>
+		</li>
+	</ul>
+</div>
+
+
+		</footer>
 	</article>
 </main>
 
@@ -311,6 +326,18 @@ cho én nhạn hiệp đôi ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

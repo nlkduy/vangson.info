@@ -149,8 +149,10 @@
 			<h1 class="post__title">Bí ẩn bài hát Hoa Trinh Nữ</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-03-24T18:08:02&#43;07:00">tháng 3 24, 2018</time>
-	<time class="meta__text" datetime="2018-07-20T15:10:31&#43;07:00">(Cập nhật lần cuối: tháng 7 20, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-03-24T18:08:02&#43;07:00">24/03/2018</time>
+	<time class="meta__text" datetime="2018-07-20T15:10:31&#43;07:00">(Cập nhật lần cuối: 20/07/2018)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
 	</span>
 </div>
 
@@ -309,7 +311,6 @@
 <p style="text-align: justify;"><span style="font-family: arial, helvetica, sans-serif;">Bài hát lập tức được phổ biến sâu rộng, được nhiều ca sĩ cả nam và nữ hát. Có thể người ngoài không hiểu ẩn tình sâu kín trong nội dung bài hát, nhưng người trong cuộc chắc chắn biết nhạc sĩ Trần Thiện Thanh muốn thông qua bài hát Hoa trinh nữ để nói hộ lòng mình, một chuyện tình quá cay đắng, sự than thân trách phận qua những ca từ, sự trải lòng qua những giai điệu và sự thù hận tuy biến thành bài hát, khéo léo ví von về một loài hoa nhưng rất rõ nỗi chua cay mà hơn ai hết Minh Hiếu là người hiểu ẩn ý này. Có lẽ vì thế mà bài hát Hoa trinh nữ tuy được phổ biến bởi các ca sĩ khác trên đài phát thanh, phòng trà, vũ trường, tụ điểm ca nhạc, thu âm rầm rộ nhưng chính ca sĩ Minh Hiếu lại không hát bài này.</span></p>
 <p style="text-align: justify;"><span style="font-family: arial, helvetica, sans-serif;">Ngày giải phóng 30.4.1975 ca sĩ Minh Hiếu theo ông tướng bại trận Vĩnh Lộc chạy ra nước ngoài. Những năm sau đó Minh Hiếu xuất hiện, đi hát trở lại nhiều nơi trên đất Mỹ nhưng trong số những bài hát ruột một thời ở Sài Gòn như: Quen nhau trên đường về, Nỗi buồn gác trọ, Cho tôi tìm lại một mùa xuân .. tuyệt nhiên vẫn không thấy Minh Hiếu hát bài “Hoa trinh nữ” của Trần Thiện Thanh, kể cả khi nhạc sĩ Trần Thiện Thanh tức ca sĩ Nhật Trường đã chết. Minh Hiếu không muốn nhắc lại kỷ niệm xưa chăng?</span></p>
 <p style="text-align: center;"><span style="font-size: 18pt; font-family: arial, helvetica, sans-serif;"><strong>Hết</strong></span></p>
-<p style="text-align: center;"><iframe src="//www.youtube.com/embed/m303WqGQPAM" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
 <blockquote>
 <p style="text-align: justify;"><span style="font-family: arial, helvetica, sans-serif;">Tư liệu 'Bí ẩn bài hát Hoa trinh nữ': </span><span style="font-family: arial, helvetica, sans-serif;"><a href="https://gau0choi.blogspot.com/search/label/Hoa%20trinh%20n%E1%BB%AF" target="_blank" rel="noopener">https://gau0choi.blogspot.com/</a></span></p>
 </blockquote>
@@ -436,6 +437,18 @@
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

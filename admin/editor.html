@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Soạn Thảo Bài Đăng - Quản Trị Vàng Son</title>
+	<link rel="icon" type="image/png" href="/favicon.png?v=2">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--primary: #e22d30;
+			--primary-hover: #c41e21;
+			--primary-soft: rgba(226, 45, 48, 0.1);
+			--bg: #f4f6f9;
+			--surface: #ffffff;
+			--sidebar-bg: #1e1f26;
+			--sidebar-text: #c9cdd4;
+			--text: #1f2329;
+			--text-muted: #646a73;
+			--border: #e5e6eb;
+			--danger: #dc2626;
+			--radius: 10px;
+			--shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		[hidden] {
+			display: none !important;
+		}
+
+		body {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			display: flex;
+			min-height: 100vh;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		/* Sidebar */
+		.sidebar {
+			width: 255px;
+			background: var(--sidebar-bg);
+			color: var(--sidebar-text);
+			display: flex;
+			flex-direction: column;
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 100;
+		}
+
+		.sidebar__brand {
+			padding: 22px 20px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			text-align: center;
+		}
+
+		.sidebar__logo {
+			font-family: 'Playfair Display', Georgia, serif;
+			font-size: 1.65rem;
+			font-weight: 800;
+			letter-spacing: 0.08em;
+			color: #fff;
+			text-decoration: none;
+			display: block;
+		}
+
+		.sidebar__sub {
+			font-size: 0.72rem;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: #9ca3af;
+			margin-top: 4px;
+		}
+
+		.sidebar__nav {
+			padding: 16px 12px;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.nav-link {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+			padding: 11px 14px;
+			border-radius: 8px;
+			color: var(--sidebar-text);
+			font-size: 0.92rem;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.15s ease;
+		}
+
+		.nav-link:hover {
+			background: rgba(255, 255, 255, 0.07);
+			color: #fff;
+		}
+
+		.nav-link.active {
+			background: var(--primary);
+			color: #fff;
+			font-weight: 600;
+		}
+
+		.sidebar__footer {
+			padding: 16px;
+			border-top: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.sidebar__ext {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 9px 12px;
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.08);
+			color: #fff;
+			text-decoration: none;
+			font-size: 0.85rem;
+			font-weight: 500;
+		}
+
+		.sidebar__ext:hover {
+			background: rgba(255, 255, 255, 0.16);
+		}
+
+		/* Main */
+		.main {
+			flex: 1;
+			margin-left: 255px;
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+
+		.topbar {
+			background: var(--surface);
+			border-bottom: 1px solid var(--border);
+			padding: 14px 28px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			position: sticky;
+			top: 0;
+			z-index: 50;
+		}
+
+		.topbar__left {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			min-width: 0;
+			flex: 1;
+		}
+
+		.topbar__title {
+			font-size: 1.15rem;
+			font-weight: 700;
+			color: var(--text);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.topbar__actions {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex-shrink: 0;
+		}
+
+		.server-status {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 0.8rem;
+			padding: 5px 12px;
+			border-radius: 999px;
+			font-weight: 500;
+			background: #ecfdf5;
+			color: #047857;
+			border: 1px solid #a7f3d0;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.server-status.offline {
+			background: #fef2f2;
+			color: #b91c1c;
+			border-color: #fecaca;
+		}
+
+		.status-dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: currentColor;
+			flex-shrink: 0;
+		}
+
+		.content {
+			padding: 24px 28px 60px;
+			max-width: 1440px;
+			width: 100%;
+			margin: 0 auto;
+		}
+
+		/* Buttons */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 9px 16px;
+			border-radius: 8px;
+			font-size: 0.88rem;
+			font-weight: 600;
+			border: 1px solid transparent;
+			cursor: pointer;
+			transition: all 0.15s ease;
+			text-decoration: none;
+			white-space: nowrap;
+		}
+
+		.btn--primary {
+			background: var(--primary);
+			color: #fff;
+		}
+
+		.btn--primary:hover {
+			background: var(--primary-hover);
+		}
+
+		.btn--outline {
+			background: var(--surface);
+			border-color: var(--border);
+			color: var(--text);
+		}
+
+		.btn--outline:hover {
+			border-color: #c0c4cc;
+			background: #f9fafb;
+		}
+
+		.btn--danger {
+			background: #fef2f2;
+			color: var(--danger);
+			border-color: #fecaca;
+		}
+
+		.btn--danger:hover {
+			background: var(--danger);
+			color: #fff;
+		}
+
+		.btn--sm {
+			padding: 6px 11px;
+			font-size: 0.8rem;
+			border-radius: 6px;
+		}
+
+		.btn--lg {
+			padding: 11px 22px;
+			font-size: 0.95rem;
+		}
+
+		/* Editor Page Grid */
+		.editor-layout {
+			display: grid;
+			grid-template-columns: minmax(0, 2.3fr) minmax(300px, 1fr);
+			gap: 24px;
+			align-items: start;
+		}
+
+		.card {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			box-shadow: var(--shadow);
+			padding: 22px;
+			margin-bottom: 20px;
+		}
+
+		.card__title {
+			font-size: 0.96rem;
+			font-weight: 700;
+			margin-bottom: 14px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid var(--border);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.form-group {
+			margin-bottom: 16px;
+		}
+
+		.form-group:last-child {
+			margin-bottom: 0;
+		}
+
+		.form-label {
+			display: block;
+			font-weight: 600;
+			font-size: 0.86rem;
+			margin-bottom: 6px;
+			color: var(--text);
+		}
+
+		.form-hint {
+			font-size: 0.78rem;
+			color: var(--text-muted);
+			margin-top: 5px;
+		}
+
+		.input,
+		.select,
+		.textarea {
+			width: 100%;
+			padding: 10px 13px;
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			font-size: 0.92rem;
+			font-family: inherit;
+			color: var(--text);
+			background: #fff;
+			outline: none;
+			transition: border-color 0.15s;
+		}
+
+		.input--title {
+			font-size: 1.15rem;
+			font-weight: 600;
+			padding: 12px 15px;
+		}
+
+		.input:focus,
+		.select:focus,
+		.textarea:focus {
+			border-color: var(--primary);
+		}
+
+		/* Rich Editor */
+		.editor-box {
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			overflow: hidden;
+			background: #fff;
+		}
+
+		.editor-toolbar {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			padding: 10px 12px;
+			background: #f8fafc;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.editor-tools {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 5px;
+		}
+
+		.tool-btn {
+			padding: 6px 10px;
+			border: 1px solid var(--border);
+			background: #fff;
+			border-radius: 6px;
+			font-size: 0.82rem;
+			font-weight: 600;
+			color: var(--text);
+			cursor: pointer;
+		}
+
+		.tool-btn:hover {
+			background: #f1f5f9;
+			border-color: #cbd5e1;
+		}
+
+		.tool-btn.active {
+			background: var(--primary);
+			color: #fff;
+			border-color: var(--primary);
+		}
+
+		.editor-visual {
+			min-height: 480px;
+			padding: 20px;
+			outline: none;
+			font-size: 1rem;
+			line-height: 1.75;
+		}
+
+		.editor-visual p {
+			margin-bottom: 1em;
+		}
+
+		.editor-visual blockquote {
+			border-left: 4px solid var(--primary);
+			padding: 10px 18px;
+			background: #f8fafc;
+			margin: 1em 0;
+			font-style: italic;
+		}
+
+		.editor-visual img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 6px;
+		}
+
+		.editor-code {
+			width: 100%;
+			min-height: 480px;
+			padding: 18px;
+			border: 0;
+			outline: none;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+			font-size: 0.9rem;
+			line-height: 1.65;
+			resize: vertical;
+		}
+
+		/* Category Selector Pills */
+		.cat-pills-box {
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			padding: 12px;
+			max-height: 260px;
+			overflow-y: auto;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 7px;
+			background: #fafbfc;
+		}
+
+		.cat-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 6px 11px;
+			border-radius: 999px;
+			border: 1px solid var(--border);
+			background: #fff;
+			font-size: 0.82rem;
+			cursor: pointer;
+			user-select: none;
+			transition: all 0.15s;
+		}
+
+		.cat-pill input {
+			accent-color: var(--primary);
+		}
+
+		.cat-pill.checked {
+			background: var(--primary-soft);
+			border-color: var(--primary);
+			color: var(--primary);
+			font-weight: 600;
+		}
+
+		.offline-banner {
+			background: #fffbeb;
+			border: 1px solid #fde68a;
+			color: #92400e;
+			padding: 14px 20px;
+			border-radius: var(--radius);
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+
+		.offline-banner code {
+			background: rgba(0, 0, 0, 0.07);
+			padding: 3px 8px;
+			border-radius: 5px;
+			font-weight: 600;
+		}
+
+		.toast-container {
+			position: fixed;
+			bottom: 24px;
+			right: 24px;
+			z-index: 1000;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.toast {
+			background: #1e293b;
+			color: #fff;
+			padding: 12px 18px;
+			border-radius: 10px;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+			font-size: 0.88rem;
+			font-weight: 500;
+		}
+
+		.toast--success {
+			border-left: 4px solid #22c55e;
+		}
+
+		.toast--error {
+			border-left: 4px solid #ef4444;
+		}
+
+		@media (max-width: 980px) {
+			.editor-layout {
+				grid-template-columns: 1fr;
+			}
+			.sidebar {
+				width: 210px;
+			}
+			.main {
+				margin-left: 210px;
+			}
+		}
+
+		@media (max-width: 720px) {
+			body {
+				flex-direction: column;
+			}
+			.sidebar {
+				position: static;
+				width: 100%;
+			}
+			.main {
+				margin-left: 0;
+			}
+			.content {
+				padding: 16px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- Sidebar -->
+	<aside class="sidebar">
+		<div class="sidebar__brand">
+			<a href="/admin/" class="sidebar__logo">VÀNG SON</a>
+			<div class="sidebar__sub">Hệ Thống Quản Trị CMS</div>
+		</div>
+
+		<nav class="sidebar__nav">
+			<a href="/admin/?tab=posts" class="nav-link" id="nav-posts">
+				<span>📝 Quản lý Bài đăng</span>
+			</a>
+			<a href="/admin/editor.html" class="nav-link active" id="nav-editor">
+				<span>➕ Thêm bài đăng mới</span>
+			</a>
+			<a href="/admin/?tab=categories" class="nav-link">
+				<span>📂 Quản lý Thể loại</span>
+			</a>
+			<a href="/admin/?tab=pages" class="nav-link" id="nav-pages">
+				<span>📄 Quản lý Trang tĩnh</span>
+			</a>
+		</nav>
+
+		<div class="sidebar__footer">
+			<a href="/" target="_blank" class="sidebar__ext">🌐 Xem Trang Chủ Vàng Son ↗</a>
+		</div>
+	</aside>
+
+	<!-- Main Content -->
+	<div class="main">
+		<header class="topbar">
+			<div class="topbar__left">
+				<a href="/admin/" id="btn-back" class="btn btn--outline">← Quay lại danh sách</a>
+			</div>
+			<div class="topbar__actions">
+				<a href="#" id="btn-view-live" target="_blank" class="btn btn--outline" hidden>🌐 Xem bài trên web ↗</a>
+				<button type="button" class="btn btn--danger" id="btn-delete-post" hidden onclick="window.vsEditor.deletePost()">🗑️ Xóa bài này</button>
+				<button type="button" class="btn btn--primary btn--lg" id="btn-save-top" onclick="window.vsEditor.savePost()">💾 Lưu bài đăng</button>
+			</div>
+		</header>
+
+		<main class="content">
+			<div class="offline-banner" id="offline-banner" hidden>
+				<div>
+					<strong>⚠️ Chưa kết nối được Admin API Server (cổng 1314).</strong>
+					Để lưu bài viết trực tiếp vào mã nguồn Hugo, hãy chạy lệnh:
+					<code>python3 admin_server.py</code>
+				</div>
+				<button type="button" class="btn btn--sm btn--outline" onclick="window.vsEditor.init()">Thử kết nối lại</button>
+			</div>
+
+			<form id="form-post" onsubmit="return false;">
+				<div class="editor-layout">
+					<!-- Left Column: Title, Slug/URL, Rich Content, SEO Description -->
+					<div>
+						<div class="card">
+							<div class="form-group">
+								<label class="form-label" for="post-title">Tiêu đề bài đăng *</label>
+								<input type="text" id="post-title" class="input input--title" placeholder="Ví dụ: Làng tôi - Văn Cao" required>
+							</div>
+
+							<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+								<div class="form-group">
+									<label class="form-label" for="post-slug">Slug (Đường dẫn tĩnh không dấu)</label>
+									<div style="display:flex; gap:8px;">
+										<input type="text" id="post-slug" class="input" placeholder="lang-toi-van-cao">
+										<button type="button" class="btn btn--sm btn--outline" onclick="window.vsEditor.regenSlug()" title="Tạo lại slug từ tiêu đề">Tạo lại</button>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="form-label" for="post-url">Đường dẫn URL đầy đủ</label>
+									<input type="text" id="post-url" class="input" placeholder="/nhac-tien-chien/lang-toi-van-cao">
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card__title">
+								<span>Nội dung bài viết</span>
+								<span style="font-size:0.78rem; font-weight:400; color:var(--text-muted);">Hỗ trợ soạn thảo trực quan hoặc mã HTML</span>
+							</div>
+							<div class="editor-box">
+								<div class="editor-toolbar">
+									<div class="editor-tools" id="visual-toolbar">
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execCmd('bold')" title="In đậm"><b>B</b></button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execCmd('italic')" title="In nghiêng"><i>I</i></button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execCmd('underline')" title="Gạch chân"><u>U</u></button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execBlock('H2')">H2</button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execBlock('H3')">H3</button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execBlock('BLOCKQUOTE')" title="Trích dẫn / Lời bài hát">❝ Trích dẫn</button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.execCmd('insertUnorderedList')">• Danh sách</button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.insertLink()">🔗 Chèn Link</button>
+										<button type="button" class="tool-btn" onclick="document.getElementById('upload-inline-input').click()">🖼️ Chèn Ảnh / Nhạc MP3</button>
+										<button type="button" class="tool-btn" onclick="window.vsEditor.insertYoutube()">▶️ Nhúng YouTube</button>
+										<input type="file" id="upload-inline-input" accept="image/*,audio/*" hidden onchange="window.vsEditor.handleInlineUpload(this)">
+									</div>
+									<div>
+										<button type="button" class="tool-btn active" id="btn-mode-visual" onclick="window.vsEditor.setEditorMode('visual')">Trực quan</button>
+										<button type="button" class="tool-btn" id="btn-mode-html" onclick="window.vsEditor.setEditorMode('html')">Mã HTML</button>
+									</div>
+								</div>
+								<div id="editor-visual" class="editor-visual" contenteditable="true"></div>
+								<textarea id="editor-html" class="editor-code" hidden></textarea>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card__title">Tối ưu Tìm kiếm &amp; Chuyển hướng (SEO)</div>
+							<div class="form-group">
+								<label class="form-label" for="post-desc">Mô tả ngắn / Trích dẫn (SEO Description)</label>
+								<textarea id="post-desc" class="textarea" rows="3" placeholder="Để trống hệ thống sẽ tự động trích xuất từ đoạn đầu bài viết..."></textarea>
+							</div>
+							<div class="form-group">
+								<label class="form-label" for="post-aliases">Đường dẫn chuyển hướng cũ (Aliases)</label>
+								<input type="text" id="post-aliases" class="input" placeholder="/duong-dan-cu-1, /duong-dan-cu-2">
+								<div class="form-hint">Giữ nguyên SEO khi đổi URL (phân cách nhiều đường dẫn bằng dấu phẩy).</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Right Column: Publish Settings, Categories, Tags, Thumbnail -->
+					<div>
+						<div class="card">
+							<div class="card__title">Thông tin Xuất bản</div>
+							<div class="form-group">
+								<label class="form-label" for="post-draft">Trạng thái</label>
+								<select id="post-draft" class="select">
+									<option value="false">✅ Đã xuất bản (Công khai)</option>
+									<option value="true">📋 Bản nháp (Ẩn)</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label" for="post-date">Ngày đăng</label>
+								<input type="date" id="post-date" class="input">
+							</div>
+							<div style="margin-top: 18px;">
+								<button type="button" class="btn btn--primary btn--lg" style="width:100%;" id="btn-save-side" onclick="window.vsEditor.savePost()">
+									💾 Lưu &amp; Xuất bản
+								</button>
+							</div>
+						</div>
+
+						<div class="card" id="card-categories">
+							<div class="card__title">
+								<span>Thể loại bài đăng *</span>
+								<button type="button" class="btn btn--sm btn--outline" onclick="window.vsEditor.quickAddCategory()">+ Thêm thể loại</button>
+							</div>
+							<div class="cat-pills-box" id="post-cats-box">
+								<span style="color:var(--text-muted);">Đang tải danh sách thể loại...</span>
+							</div>
+							<div class="form-hint">Chọn một hoặc nhiều thể loại cho bài viết.</div>
+						</div>
+
+						<div class="card" id="card-tags">
+							<div class="card__title">Thẻ (Tags)</div>
+							<div class="form-group">
+								<input type="text" id="post-tags" class="input" placeholder="Ví dụ: Văn Cao, Nhạc Tiền Chiến...">
+								<div class="form-hint">Phân cách nhiều thẻ bằng dấu phẩy (,).</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card__title">Ảnh đại diện (Thumbnail)</div>
+							<div class="form-group">
+								<div style="display:flex; gap:8px;">
+									<input type="text" id="post-thumb" class="input" placeholder="/wp-content/uploads/...">
+									<button type="button" class="btn btn--sm btn--outline" onclick="document.getElementById('upload-thumb-input').click()">Tải ảnh</button>
+									<input type="file" id="upload-thumb-input" accept="image/*" hidden onchange="window.vsEditor.handleThumbUpload(this)">
+								</div>
+								<div id="thumb-preview-wrap" style="margin-top:12px;" hidden>
+									<img id="thumb-preview" src="" alt="Thumbnail preview" style="max-width:100%; max-height:180px; border-radius:8px; border:1px solid var(--border);">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</main>
+	</div>
+
+	<div class="toast-container" id="toast-container"></div>
+
+	<script>
+	window.vsEditor = (function () {
+		var API_BASE = (window.location.port === "1314") ? "" : "http://localhost:1314";
+		var params = new URLSearchParams(window.location.search);
+		var state = {
+			scope: (params.get("scope") || "posts").toLowerCase(),
+			filename: params.get("file") || null,
+			defaultCat: params.get("cat") || "",
+			categories: [],
+			editorMode: "visual"
+		};
+
+		function slugifyVN(str) {
+			if (!str) return "";
+			return str
+				.toString()
+				.trim()
+				.toLowerCase()
+				.replace(/đ/g, "d")
+				.normalize("NFD")
+				.replace(/[\u0300-\u036f]/g, "")
+				.replace(/[^a-z0-9\s-]/g, "")
+				.replace(/[\s-]+/g, "-")
+				.replace(/^-+|-+$/g, "");
+		}
+
+		function escapeHtml(s) {
+			return (s || "")
+				.toString()
+				.replace(/&/g, "&amp;")
+				.replace(/</g, "&lt;")
+				.replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;");
+		}
+
+		function toast(msg, type) {
+			var box = document.getElementById("toast-container");
+			var el = document.createElement("div");
+			el.className = "toast toast--" + (type || "success");
+			el.textContent = msg;
+			box.appendChild(el);
+			setTimeout(function () { el.remove(); }, 3500);
+		}
+
+		async function apiFetch(path, options) {
+			var res = await fetch(API_BASE + path, Object.assign({
+				headers: { "Content-Type": "application/json" }
+			}, options || {}));
+			var data = await res.json();
+			if (!res.ok || !data.ok) {
+				throw new Error(data.error || "Lỗi kết nối máy chủ API");
+			}
+			return data;
+		}
+
+		async function init() {
+			var isPage = (state.scope === "pages");
+			document.getElementById("btn-back").href = isPage ? "/admin/?tab=pages" : "/admin/?tab=posts";
+			document.getElementById("card-categories").hidden = isPage;
+			document.getElementById("card-tags").hidden = isPage;
+			document.getElementById("post-date").value = new Date().toISOString().slice(0, 10);
+
+			try {
+				await apiFetch("/api/status");
+				document.getElementById("offline-banner").hidden = true;
+
+				var catRes = await apiFetch("/api/categories");
+				state.categories = catRes.items || [];
+
+				if (state.filename) {
+					await loadExistingItem(state.filename);
+				} else {
+					var initCats = state.defaultCat ? [state.defaultCat] : [];
+					renderCategoryPills(initCats);
+					setEditorContent("<p></p>");
+					document.getElementById("post-title").focus();
+				}
+			} catch (err) {
+				document.getElementById("offline-banner").hidden = false;
+			}
+		}
+
+		async function loadExistingItem(filename) {
+			var res = await apiFetch("/api/posts/" + encodeURIComponent(filename) + "?scope=" + state.scope);
+			var item = res.item;
+			state.filename = item.filename;
+
+			document.title = "Sửa: " + item.title + " - Quản Trị Vàng Son";
+			document.getElementById("post-title").value = item.title;
+			document.getElementById("post-slug").value = item.slug;
+			document.getElementById("post-url").value = item.url;
+			document.getElementById("post-desc").value = item.description || "";
+			document.getElementById("post-draft").value = item.draft ? "true" : "false";
+			document.getElementById("post-date").value = item.isoDate || new Date().toISOString().slice(0, 10);
+			document.getElementById("post-tags").value = (item.tags || []).join(", ");
+			document.getElementById("post-thumb").value = item.thumbnail || "";
+			document.getElementById("post-aliases").value = (item.aliases || []).join(", ");
+
+			var liveBtn = document.getElementById("btn-view-live");
+			liveBtn.href = item.url || "/";
+			liveBtn.hidden = false;
+			document.getElementById("btn-delete-post").hidden = false;
+
+			updateThumbPreview(item.thumbnail || "");
+			renderCategoryPills(item.categories || []);
+			setEditorContent(item.body || "");
+		}
+
+		function renderCategoryPills(selectedCats) {
+			var box = document.getElementById("post-cats-box");
+			var selSet = new Set(selectedCats || []);
+			box.innerHTML = state.categories.map(function (c) {
+				var checked = selSet.has(c.title);
+				return '<label class="cat-pill ' + (checked ? "checked" : "") + '">' +
+					'<input type="checkbox" value="' + escapeHtml(c.title) + '" ' + (checked ? "checked" : "") + ' onchange="window.vsEditor.onCatChange(this)">' +
+					'<span>' + escapeHtml(c.title) + '</span>' +
+				'</label>';
+			}).join("");
+		}
+
+		function onCatChange(checkbox) {
+			checkbox.parentElement.classList.toggle("checked", checkbox.checked);
+			autoUpdateUrl();
+		}
+
+		function getSelectedCategories() {
+			var checked = [];
+			document.querySelectorAll("#post-cats-box input[type=checkbox]:checked").forEach(function (cb) {
+				checked.push(cb.value);
+			});
+			return checked;
+		}
+
+		function autoUpdateUrl() {
+			if (state.filename) return;
+			var slug = document.getElementById("post-slug").value.trim();
+			if (!slug) return;
+			if (state.scope === "pages") {
+				document.getElementById("post-url").value = "/" + slug;
+				return;
+			}
+			var cats = getSelectedCategories();
+			var primaryCat = cats[0] || "chua-phan-loai";
+			var catObj = state.categories.find(function (c) { return c.title === primaryCat; });
+			var catSlug = catObj ? catObj.slug : slugifyVN(primaryCat);
+			document.getElementById("post-url").value = "/" + catSlug + "/" + slug;
+		}
+
+		function regenSlug() {
+			var title = document.getElementById("post-title").value;
+			var s = slugifyVN(title);
+			document.getElementById("post-slug").value = s;
+			var cats = getSelectedCategories();
+			var primaryCat = cats[0] || "chua-phan-loai";
+			var catObj = state.categories.find(function (c) { return c.title === primaryCat; });
+			var catSlug = catObj ? catObj.slug : slugifyVN(primaryCat);
+			document.getElementById("post-url").value = (state.scope === "pages") ? ("/" + s) : ("/" + catSlug + "/" + s);
+		}
+
+		function setEditorMode(mode) {
+			var visualEl = document.getElementById("editor-visual");
+			var htmlEl = document.getElementById("editor-html");
+			if (mode === "html" && state.editorMode === "visual") {
+				htmlEl.value = visualEl.innerHTML.trim();
+			} else if (mode === "visual" && state.editorMode === "html") {
+				visualEl.innerHTML = htmlEl.value;
+			}
+			state.editorMode = mode;
+			visualEl.hidden = (mode !== "visual");
+			htmlEl.hidden = (mode !== "html");
+			document.getElementById("visual-toolbar").style.visibility = (mode === "visual") ? "visible" : "hidden";
+			document.getElementById("btn-mode-visual").classList.toggle("active", mode === "visual");
+			document.getElementById("btn-mode-html").classList.toggle("active", mode === "html");
+		}
+
+		function setEditorContent(htmlContent) {
+			document.getElementById("editor-visual").innerHTML = htmlContent || "";
+			document.getElementById("editor-html").value = htmlContent || "";
+		}
+
+		function getEditorContent() {
+			if (state.editorMode === "html") {
+				return document.getElementById("editor-html").value.trim();
+			}
+			return document.getElementById("editor-visual").innerHTML.trim();
+		}
+
+		function execCmd(cmd, val) {
+			document.getElementById("editor-visual").focus();
+			document.execCommand(cmd, false, val || null);
+		}
+
+		function execBlock(tag) {
+			document.getElementById("editor-visual").focus();
+			document.execCommand("formatBlock", false, tag);
+		}
+
+		function insertLink() {
+			var url = prompt("Nhập đường dẫn URL (ví dụ: https://...):");
+			if (url) execCmd("createLink", url);
+		}
+
+		function insertYoutube() {
+			var input = prompt("Nhập link YouTube (ví dụ: https://www.youtube.com/watch?v=xxxxxx):");
+			if (!input) return;
+			var m = input.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+			var vid = m ? m[1] : input.trim();
+			var embedHtml = '<p><iframe width="560" height="315" src="https://www.youtube.com/embed/' + escapeHtml(vid) + '" frameborder="0" allowfullscreen></iframe></p>';
+			insertHtmlIntoEditor(embedHtml);
+		}
+
+		function insertHtmlIntoEditor(snippet) {
+			if (state.editorMode === "html") {
+				var area = document.getElementById("editor-html");
+				area.value += "\n" + snippet;
+			} else {
+				var vis = document.getElementById("editor-visual");
+				vis.focus();
+				document.execCommand("insertHTML", false, snippet);
+			}
+		}
+
+		function fileToBase64(file) {
+			return new Promise(function (resolve, reject) {
+				var reader = new FileReader();
+				reader.onload = function () { resolve(reader.result); };
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+		}
+
+		async function handleThumbUpload(inputEl) {
+			var file = inputEl.files && inputEl.files[0];
+			if (!file) return;
+			try {
+				toast("Đang tải ảnh lên...");
+				var b64 = await fileToBase64(file);
+				var res = await apiFetch("/api/upload", {
+					method: "POST",
+					body: JSON.stringify({ filename: file.name, data: b64 })
+				});
+				document.getElementById("post-thumb").value = res.url;
+				updateThumbPreview(res.url);
+				toast("Đã tải ảnh đại diện lên thành công!");
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				inputEl.value = "";
+			}
+		}
+
+		async function handleInlineUpload(inputEl) {
+			var file = inputEl.files && inputEl.files[0];
+			if (!file) return;
+			try {
+				toast("Đang tải file lên...");
+				var b64 = await fileToBase64(file);
+				var res = await apiFetch("/api/upload", {
+					method: "POST",
+					body: JSON.stringify({ filename: file.name, data: b64 })
+				});
+				if (file.type.indexOf("audio/") === 0 || /\.mp3$|\.m4a$|\.wav$/i.test(file.name)) {
+					insertHtmlIntoEditor('<p><audio controls src="' + res.url + '"></audio></p>');
+				} else {
+					insertHtmlIntoEditor('<p><img src="' + res.url + '" alt="' + escapeHtml(file.name) + '"></p>');
+				}
+				toast("Đã chèn file vào bài viết!");
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				inputEl.value = "";
+			}
+		}
+
+		function updateThumbPreview(url) {
+			var wrap = document.getElementById("thumb-preview-wrap");
+			var img = document.getElementById("thumb-preview");
+			if (url && url.trim()) {
+				img.src = url.trim();
+				wrap.hidden = false;
+			} else {
+				wrap.hidden = true;
+			}
+		}
+
+		async function quickAddCategory() {
+			var name = prompt("Nhập tên thể loại mới:");
+			if (!name || !name.trim()) return;
+			name = name.trim();
+			try {
+				var selected = getSelectedCategories();
+				var res = await apiFetch("/api/categories", {
+					method: "POST",
+					body: JSON.stringify({ title: name })
+				});
+				toast(res.message);
+				var catRes = await apiFetch("/api/categories");
+				state.categories = catRes.items || [];
+				selected.push(name);
+				renderCategoryPills(selected);
+				autoUpdateUrl();
+			} catch (err) {
+				toast(err.message, "error");
+			}
+		}
+
+		async function savePost() {
+			var title = document.getElementById("post-title").value.trim();
+			if (!title) {
+				toast("Vui lòng nhập tiêu đề bài viết!", "error");
+				document.getElementById("post-title").focus();
+				return;
+			}
+			var cats = getSelectedCategories();
+			if (state.scope === "posts" && !cats.length) {
+				toast("Vui lòng chọn ít nhất 1 thể loại!", "error");
+				return;
+			}
+			var tags = document.getElementById("post-tags").value
+				.split(",")
+				.map(function (s) { return s.trim(); })
+				.filter(Boolean);
+			var aliases = document.getElementById("post-aliases").value
+				.split(",")
+				.map(function (s) { return s.trim(); })
+				.filter(Boolean);
+
+			var payload = {
+				scope: state.scope,
+				title: title,
+				slug: document.getElementById("post-slug").value.trim() || slugifyVN(title),
+				url: document.getElementById("post-url").value.trim(),
+				categories: cats,
+				tags: tags,
+				date: document.getElementById("post-date").value,
+				draft: document.getElementById("post-draft").value === "true",
+				thumbnail: document.getElementById("post-thumb").value.trim(),
+				description: document.getElementById("post-desc").value.trim(),
+				aliases: aliases,
+				body: getEditorContent()
+			};
+
+			var btnTop = document.getElementById("btn-save-top");
+			var btnSide = document.getElementById("btn-save-side");
+			btnTop.disabled = true;
+			btnSide.disabled = true;
+			btnTop.textContent = "Đang lưu...";
+			try {
+				if (state.filename) {
+					var res = await apiFetch("/api/posts/" + encodeURIComponent(state.filename) + "?scope=" + state.scope, {
+						method: "PUT",
+						body: JSON.stringify(payload)
+					});
+					toast(res.message);
+					var liveBtn = document.getElementById("btn-view-live");
+					liveBtn.href = res.url || "/";
+					liveBtn.hidden = false;
+				} else {
+					var res = await apiFetch("/api/posts?scope=" + state.scope, {
+						method: "POST",
+						body: JSON.stringify(payload)
+					});
+					toast(res.message);
+					// Switch URL to edit mode for the newly created post
+					state.filename = res.filename;
+					window.history.replaceState({}, "", "/admin/editor.html?file=" + encodeURIComponent(res.filename) + "&scope=" + state.scope);
+					var liveBtn = document.getElementById("btn-view-live");
+					liveBtn.href = res.url || "/";
+					liveBtn.hidden = false;
+					document.getElementById("btn-delete-post").hidden = false;
+				}
+			} catch (err) {
+				toast(err.message, "error");
+			} finally {
+				btnTop.disabled = false;
+				btnSide.disabled = false;
+				btnTop.textContent = "💾 Lưu bài đăng";
+			}
+		}
+
+		async function deletePost() {
+			if (!state.filename) return;
+			var title = document.getElementById("post-title").value;
+			if (!confirm("Bạn có chắc chắn muốn XÓA bài viết:\n\"" + title + "\" (" + state.filename + ") không?")) {
+				return;
+			}
+			try {
+				await apiFetch("/api/posts/" + encodeURIComponent(state.filename) + "?scope=" + state.scope, {
+					method: "DELETE"
+				});
+				window.location.href = (state.scope === "pages") ? "/admin/?tab=pages" : "/admin/?tab=posts";
+			} catch (err) {
+				toast(err.message, "error");
+			}
+		}
+
+		document.getElementById("post-title").addEventListener("input", function () {
+			if (!state.filename) {
+				document.getElementById("post-slug").value = slugifyVN(this.value);
+				autoUpdateUrl();
+			}
+		});
+
+		document.getElementById("post-slug").addEventListener("input", autoUpdateUrl);
+		document.getElementById("post-thumb").addEventListener("input", function () {
+			updateThumbPreview(this.value);
+		});
+
+		init();
+
+		return {
+			init: init,
+			onCatChange: onCatChange,
+			regenSlug: regenSlug,
+			setEditorMode: setEditorMode,
+			execCmd: execCmd,
+			execBlock: execBlock,
+			insertLink: insertLink,
+			insertYoutube: insertYoutube,
+			handleThumbUpload: handleThumbUpload,
+			handleInlineUpload: handleInlineUpload,
+			quickAddCategory: quickAddCategory,
+			savePost: savePost,
+			deletePost: deletePost
+		};
+	})();
+	</script>
+</body>
+</html>
+

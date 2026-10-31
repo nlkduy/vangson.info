@@ -45,6 +45,7 @@
 
 .logo__tagline {
 	text-transform: uppercase;
+	font-weight: 400 !important;
 }
 
 @media screen and (min-width: 768px) {
@@ -302,7 +303,7 @@ body:has(.home-centered) .primary {
 
 .home-post-card__cat {
 	color: #e22d30;
-	font-weight: 600;
+	font-weight: 400;
 	text-decoration: none;
 }
 
@@ -505,7 +506,7 @@ html[data-theme="dark"] .theme-toggle::before {
 
 .related-posts__cat {
 	color: #e22d30;
-	font-weight: 600;
+	font-weight: 400;
 	text-decoration: none;
 }
 

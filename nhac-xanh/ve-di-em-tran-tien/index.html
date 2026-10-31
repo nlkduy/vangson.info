@@ -150,8 +150,10 @@
 			<h1 class="post__title">Về đi em - Trần Tiến</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-08-17T19:48:51&#43;07:00">tháng 8 17, 2018</time>
-	<time class="meta__text" datetime="2019-11-06T00:37:27&#43;07:00">(Cập nhật lần cuối: tháng 11 06, 2019)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-xanh/" rel="category">Nhạc Xanh</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-08-17T19:48:51&#43;07:00">17/08/2018</time>
+	<time class="meta__text" datetime="2019-11-06T00:37:27&#43;07:00">(Cập nhật lần cuối: 06/11/2019)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-xanh/" rel="category">Nhạc Xanh</a>
 	</span>
 </div>
 
@@ -160,7 +162,6 @@
 		<div class="content post__content clearfix">
 			<p style="text-align: justify;">Nhạc phẩm <strong>Về Đi Em</strong> viết về các cô gái “bán hoa”, được Trần Tiến sáng tác cho cuộc vận động tuyên truyền phòng chống HIV/AIDS ..</p>
 <p style="text-align: justify;">Trong bản tự trình bày của mình, nhạc sĩ Trần Tiến đọc tựa rằng: <em>"Phố nhỏ bên sông đêm khuy vắng, lắng nghe bước chân của kẻ giang hồ lưu lạc. Cô gái quê ngày nào vẫn đi qua cửa sổ nhà tôi, giờ em phiêu bạc nơi nào? Em hãy quay về bên dòng sông mờ sương, bên mẹ bên cha. Giờ đây, tóc em chắc đã búi cao lo chuyện chồng con, đâu còn dài thướt tha theo gió bên sông như thời thiếu nữ ấy. Rồi một ngày gặp em, tóc tôi cũng đã điểm bạc. Ôi những ngày xưa thân ái còn đâu!"</em></p>
-<p style="text-align: center;"><iframe src="//www.youtube.com/embed/x8-390PnH_o" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
 <blockquote>Nguồn tư liệu:
 + <a href="https://vtc.vn/thu-phuong-qua-xuc-dong-ha-anh-tuan-ke-xau-tran-tien-d49348" target="_blank" rel="noopener noreferrer">https://vtc.vn/</a> (Thu Phương quá xúc động, Hà Anh Tuấn kể xấu Trần Tiến)
 + <a href="https://anninhthudo.vn/giai-tri/nhac-si-tran-tien-toi-lua-dao-day/456483.antd" target="_blank" rel="noopener noreferrer">https://anninhthudo.vn/</a> (Nhạc sĩ Trần Tiến: "Tôi... lừa đảo đấy!")</blockquote>
@@ -177,7 +178,6 @@ bàn tay em duyên dáng đong đưa, chợ sông nhớ bóng em đi về<br>
 tình quê mái lá đơn sơ vui câu hò<br>
 để quên đi thành phố kia xa lạ, về vui yên ấm nơi quê nhà<br>
 về đi em cô gái thơ ngây của làng ta ..</p>
-<iframe src="//www.youtube.com/embed/jQMW_BVmkyc" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 
 		</div>
 		<footer class="post__footer">
@@ -314,6 +314,18 @@ về đi em cô gái thơ ngây của làng ta ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

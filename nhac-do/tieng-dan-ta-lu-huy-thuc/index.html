@@ -150,8 +150,10 @@
 			<h1 class="post__title">Tiếng đàn Ta Lư - Huy Thục</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-01-07T14:35:31&#43;07:00">tháng 1 07, 2018</time>
-	<time class="meta__text" datetime="2018-08-05T19:54:47&#43;07:00">(Cập nhật lần cuối: tháng 8 05, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-do/" rel="category">Nhạc Đỏ</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-01-07T14:35:31&#43;07:00">07/01/2018</time>
+	<time class="meta__text" datetime="2018-08-05T19:54:47&#43;07:00">(Cập nhật lần cuối: 05/08/2018)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-do/" rel="category">Nhạc Đỏ</a>
 	</span>
 </div>
 
@@ -207,7 +209,6 @@
 <span style="font-family: arial, helvetica, sans-serif;"> các anh đánh hay hu, hu</span></p>
 <p><span style="font-family: arial, helvetica, sans-serif;">Đàn em reo ca ơi đàn Ta tư</span><br>
 <span style="font-family: arial, helvetica, sans-serif;"> rừng núi quê ta tưng bừng reo ca ..</span></p>
-<iframe src="//www.youtube.com/embed/zl6QRG882nA" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 </div>
 
 		</div>
@@ -345,6 +346,18 @@
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

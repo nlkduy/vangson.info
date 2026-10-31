@@ -149,8 +149,10 @@
 			<h1 class="post__title">Nhật Ngân: Một mai giã từ vũ khí, Ngày đá đơm bông, Qua cơn mê</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2020-04-11T23:31:21&#43;07:00">tháng 4 11, 2020</time>
-	<time class="meta__text" datetime="2020-04-12T00:46:54&#43;07:00">(Cập nhật lần cuối: tháng 4 12, 2020)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2020-04-11T23:31:21&#43;07:00">11/04/2020</time>
+	<time class="meta__text" datetime="2020-04-12T00:46:54&#43;07:00">(Cập nhật lần cuối: 12/04/2020)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-vang/" rel="category">Nhạc Vàng</a>
 	</span>
 </div>
 
@@ -192,7 +194,6 @@ ta lại gặp ta, còn vòng tay mở rộng thương mến bao la<br>
 chuông chùa làng xa chiều lại vang, bếp ai lên khói ấm tình thương<br>
 bát cơm rau thắm mối tình quê<br>
 có con trâu có nương dâu, thiên đường này mơ ước bao lâu ..</p>
-<iframe src="//www.youtube.com/embed/WQbmyx-zlV0" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <hr />
 <p style="text-align: left;"><strong>Ngày Đá Đơm Bông</strong> -<span style="font-family: arial, helvetica, sans-serif;"><em> Nhật Ngân &amp; Loan Thảo </em></span></p>
 Buổi tối ngủ trên đồi hỏi hòn đá nhỏ
@@ -215,7 +216,6 @@ tre cuối làng, cau sau vườn theo gió đong đưa</p>
 con đường nào, con đường nào dẫn đến một ngày vui<br>
 ngày vui đó bầy chim sáo rủ nhau về xây tổ<br>
 mưa sẽ về, mưa sẽ về cho đá đơm bông ..</p>
-<iframe src="//www.youtube.com/embed/dfGOKOBIaFE" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <p><span style="font-size: 10pt; font-family: arial, helvetica, sans-serif;"><em>* Cùng với những soạn giả tên tuổi thời bấy giờ như Yên Lang, Hà Triều, Hoa Phượng .. Loan Thảo (1942-1982) là một trong những soạn giả tài danh, có số lượng lớn tuồng tích sân khấu và tân cổ giao duyên được đông đảo khán giả đón nhận. Những tuồng để đời của ông như: Lan và Điệp, Tiếng hạc trong trăng, Tây Thi, Lương Sơn Bá - Chúc Anh Đài ..</em></span></p>
 <hr />
 </div>
@@ -248,7 +248,6 @@ sẽ trở về ăn năn<br>
 tôi sẽ ươm thật nhiều<br>
 trái yêu thương đầy cành<br>
 hái đem cho mọi người ..</p>
-<iframe src="//www.youtube.com/embed/-l94lW4QOes" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 
 		</div>
 	</article>
@@ -372,6 +371,18 @@ hái đem cho mọi người ..</p>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

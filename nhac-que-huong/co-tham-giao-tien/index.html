@@ -150,8 +150,9 @@
 			<h1 class="post__title">Giao Tiên: Cô Thắm về làng, Cô Thắm về quê hương</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2020-04-12T00:34:01&#43;07:00">tháng 4 12, 2020</time>
-	<time class="meta__text" datetime="2020-04-12T00:37:46&#43;07:00">(Cập nhật lần cuối: tháng 4 12, 2020)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-que-huong/" rel="category">Nhạc Quê Hương</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2020-04-12T00:34:01&#43;07:00">12/04/2020</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-que-huong/" rel="category">Nhạc Quê Hương</a>
 	</span>
 </div>
 
@@ -195,7 +196,6 @@
 <span style="font-family: arial, helvetica, sans-serif;"> ước chi ta có dâu là nàng ..</span></p>
 <p style="text-align: justify;"><span style="font-size: 10pt;">* <span style="font-family: arial, helvetica, sans-serif;">Nhạc sĩ Giao Tiên mỉm cười: <em>“Ai hát </em><strong>Cô Thắm Về Làng</strong><em> đều đoán mò rằng tác giả nằm trong “đám trai làng ta”, từng mê mẩn nét duyên dáng của cô Thắm nào đó. Tôi sáng tác “Cô Thắm về làng” bằng đàn guitar vào một đêm cuối năm 1974. Tôi mượn hình tượng “cô Thắm” nhằm ngợi ca sự nết na, thuỳ mị, đảm đang của người chị thứ chín tên Ngọc Mai - người đã tần tảo “một nắng hai sương” lo cho tôi ăn học thành tài. “Bác Năm” là bố tôi, ông cụ thứ Năm.</em> </span></span></p>
 <p style="text-align: justify;"><span style="font-size: 10pt;"><span style="font-family: arial, helvetica, sans-serif;">“Cô<span class="text_exposed_show"> Thắm” vừa ra đời đã được NXB Ngọc Chánh đặt mua (họa sĩ Hàng Châu vẽ bìa, sau tái bản in hình ca sĩ Thanh Tuyền), trình bày “cô Thắm” đầu tiên là nữ ca sĩ Sơn Ca, ca sĩ Thái Châu hát trên đĩa nhựa ..</span></span></span></p>
-<iframe src="//www.youtube.com/embed/sgIH1kC1vNg" width="560" height="314" allowfullscreen="allowfullscreen"></iframe>
 <hr />
 <p><strong>Cô Thắm Về Quê Hương</strong></p>
 <p>Mang nỗi buồn tha hương bao nhiêu năm bên kia đại dương<br>
@@ -351,6 +351,18 @@ cô Thắm còn mải mê thương sao thương mấy nhịp cầu tre<br>
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";

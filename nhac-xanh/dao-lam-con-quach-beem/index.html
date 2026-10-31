@@ -150,8 +150,10 @@
 			<h1 class="post__title">Đạo làm con - Quách Beem</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-02-10T19:38:58&#43;07:00">tháng 2 10, 2018</time>
-	<time class="meta__text" datetime="2018-10-19T10:54:19&#43;07:00">(Cập nhật lần cuối: tháng 10 19, 2018)</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-xanh/" rel="category">Nhạc Xanh</a>
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2018-02-10T19:38:58&#43;07:00">10/02/2018</time>
+	<time class="meta__text" datetime="2018-10-19T10:54:19&#43;07:00">(Cập nhật lần cuối: 19/10/2018)</time></div>
+
+<div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2 1 2h8v11H0V2z"/></svg><span class="meta__text"><a class="meta__link" href="/category/nhac-xanh/" rel="category">Nhạc Xanh</a>
 	</span>
 </div>
 
@@ -196,8 +198,6 @@
 <span style="font-family: arial, helvetica, sans-serif;"> chỉ một giây thôi</span>
 <span style="font-family: arial, helvetica, sans-serif;"> nghĩ tới cha một lần</span>
 <span style="font-family: arial, helvetica, sans-serif;"> dấu vết chân chim vẫn đang từng ngày mong ta ..</span></p>
-<p style="text-align: justify;"><iframe src="//www.youtube.com/embed/0fbWYAjS3A8" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
-<p style="text-align: justify;"><iframe src="//www.youtube.com/embed/NRDl_ZJBUW8" width="560" height="314" allowfullscreen="allowfullscreen"></iframe></p>
 
 		</div>
 		<footer class="post__footer">
@@ -334,6 +334,18 @@
 (function () {
 	document.querySelectorAll(".logo__title").forEach(function (el) {
 		el.textContent = "VÀNG SON";
+	});
+	document.querySelectorAll(".meta__item-datetime time.meta__text[datetime]").forEach(function (el) {
+		var dt = (el.getAttribute("datetime") || "").slice(0, 10);
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dt)) {
+			var p = dt.split("-");
+			var dmy = p[2] + "/" + p[1] + "/" + p[0];
+			if (el.textContent.trim().indexOf("(") === 0) {
+				el.textContent = "(Cập nhật lần cuối: " + dmy + ")";
+			} else {
+				el.textContent = dmy;
+			}
+		}
 	});
 	if (window.location.pathname === "/" || document.title === "Vàng Son" || document.title === "VÀNG SON") {
 		document.title = "Vàng Son - Thư viện giai thoại âm nhạc xưa và nay";
