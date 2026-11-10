@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap');
-
 /* Center logo, slogan, and main navigation menu + Rounded Outer Container */
 .container--outer {
 	border-radius: 16px;
@@ -57,20 +55,20 @@
 }
 
 /* Centered Homepage Layout & Hide Right Sidebar + Main Menu on Homepage */
-body:has(.home-centered) .menu,
-body:has(.home-centered) .divider {
+.body--home .menu,
+.body--home .divider {
 	display: none !important;
 }
 
-body:has(.home-centered) .header {
+.body--home .header {
 	border-bottom: 0 !important;
 }
 
-body:has(.home-centered) .sidebar {
+.body--home .sidebar {
 	display: none !important;
 }
 
-body:has(.home-centered) .primary {
+.body--home .primary {
 	-webkit-flex: 1 0 100% !important;
 	flex: 1 0 100% !important;
 	max-width: 100% !important;
@@ -116,7 +114,7 @@ body:has(.home-centered) .primary {
 
 @keyframes vsBlinkCursor {
 	to {
-		visibility: hidden;
+		opacity: 0;
 	}
 }
 
@@ -302,9 +300,14 @@ body:has(.home-centered) .primary {
 }
 
 .home-post-card__cat {
-	color: #e22d30;
+	color: #c91c1f;
 	font-weight: 400;
-	text-decoration: none;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+html[data-theme="dark"] .home-post-card__cat {
+	color: #ff6b6e;
 }
 
 .home-post-card__cat:hover {
@@ -354,6 +357,8 @@ body:has(.home-centered) .primary {
 .home-categories-section {
 	margin-bottom: 2.5rem;
 	padding-top: 1rem;
+	content-visibility: auto;
+	contain-intrinsic-size: auto 300px;
 }
 
 .home-categories-grid {
@@ -394,6 +399,12 @@ body:has(.home-centered) .primary {
 	display: none !important;
 }
 
+.footer__copyright a,
+.footer__links a {
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
 /* Circular Dark/Light Icon Theme Toggle Button */
 .theme-toggle {
 	display: inline-flex !important;
@@ -406,6 +417,7 @@ body:has(.home-centered) .primary {
 }
 
 .theme-toggle__label {
+	display: none !important;
 	font-size: 0 !important;
 	line-height: 0;
 }
@@ -505,9 +517,14 @@ html[data-theme="dark"] .theme-toggle::before {
 }
 
 .related-posts__cat {
-	color: #e22d30;
+	color: #c91c1f;
 	font-weight: 400;
-	text-decoration: none;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+html[data-theme="dark"] .related-posts__cat {
+	color: #ff6b6e;
 }
 
 .related-posts__cat:hover {
